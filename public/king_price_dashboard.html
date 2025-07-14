@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>King Price Strategic Opportunity Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS for OpenStreetMap (if needed for maps section) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    <style>
+        /* Walmart Corporate CI Guide Styling */
+        :root {
+            --walmart-blue-primary: #0071CE;
+            --walmart-blue-dark: #004C91;
+            --walmart-yellow-spark: #FFC220;
+            --walmart-green-forest: #338B33;
+            --walmart-gray-light: #F8F8F8;
+            --walmart-gray-medium: #555555;
+            --walmart-gray-dark: #333333;
+            --walmart-white: #FFFFFF;
+            --walmart-border-light: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--walmart-gray-light);
+            color: var(--walmart-gray-dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-header-bg {
+            background-color: var(--walmart-blue-dark);
+            color: var(--walmart-white);
+        }
+        .sidebar-bg {
+            background-color: var(--walmart-white);
+            color: var(--walmart-gray-dark);
+            border-right: 1px solid var(--walmart-border-light);
+        }
+        .main-content-bg {
+            background-color: var(--walmart-gray-light);
+        }
+        .dashboard-primary-text {
+            color: var(--walmart-blue-dark);
+        }
+        .dashboard-secondary-text {
+            color: var(--walmart-blue-primary);
+        }
+        .text-accent-yellow {
+            color: var(--walmart-yellow-spark);
+        }
+        .text-accent-green {
+            color: var(--walmart-green-forest);
+        }
+        .text-muted {
+            color: var(--walmart-gray-medium);
+        }
+        .dashboard-card-bg {
+            background-color: var(--walmart-white);
+            border: 1px solid var(--walmart-border-light);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+        .hover-bg-light:hover {
+            background-color: rgba(0, 113, 206, 0.1); /* Light blue hover */
+        }
+        .sidebar-nav-item.active {
+            background-color: var(--walmart-blue-primary);
+            color: var(--walmart-white);
+        }
+        .sidebar-nav-item.active:hover {
+            background-color: var(--walmart-blue-dark);
+        }
+
+        /* Specific Card Styles (from previous document, adapted) */
+        .card {
+            background-color: white;
+            border-radius: 0.5rem; /* Slightly less rounded */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Softer shadow */
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid var(--walmart-border-light);
+        }
+        .kpi-value {
+            font-weight: 900;
+            color: var(--walmart-blue-primary);
+        }
+        .kpi-label {
+            font-weight: 700;
+            color: var(--walmart-gray-dark);
+        }
+        .list-item-icon {
+            color: var(--walmart-green-forest);
+            margin-right: 0.75rem;
+            font-weight: bold;
+        }
+        .pitch-point {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .pitch-icon {
+            color: var(--walmart-yellow-spark);
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            line-height: 1.5rem;
+            font-weight: 900;
+        }
+        .fruitful-section-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--walmart-blue-dark);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .fruitful-section-subtitle {
+            font-size: 1.125rem;
+            color: var(--walmart-gray-medium);
+            text-align: center;
+            max-width: 48rem;
+            margin: 0 auto 3rem auto;
+        }
+        .tier-card {
+            background-color: var(--walmart-white);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--walmart-border-light);
+        }
+        .tier-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .tier-card.highlight {
+            border-color: var(--walmart-blue-primary);
+            transform: scale(1.02);
+        }
+        .benefit-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+        .benefit-list i {
+            color: var(--walmart-green-forest);
+            margin-right: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        .value-loop-card {
+            background: linear-gradient(135deg, #E0F2FE, #D2E8F8); /* Lighter Blue Gradient */
+            border-left: 4px solid var(--walmart-blue-primary);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .banimal-footer-feature {
+            background-color: var(--walmart-blue-dark);
+        }
+        .bbbee-section-card {
+            background: linear-gradient(135deg, var(--walmart-blue-dark), var(--walmart-blue-primary));
+            color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .bbbee-section-card .bbbee-title {
+            font-size: 2.75rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            color: white;
+        }
+        .bbbee-section-card .bbbee-subtitle {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--walmart-yellow-spark);
+        }
+        .bbbee-section-card .bbbee-point {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .bbbee-section-card .bbbee-point-icon {
+            font-size: 2.5rem;
+            color: var(--walmart-yellow-spark);
+            margin-right: 1.5rem;
+            min-width: 2.5rem;
+        }
+        .bbbee-section-card .bbbee-point-text {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: white;
+        }
+        .bbbee-section-card .bbbee-point-text strong {
+            color: var(--walmart-yellow-spark);
+        }
+
+        .smart-grid-module-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--walmart-blue-primary);
+        }
+        .smart-grid-module-card h4 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--walmart-blue-dark);
+            margin-bottom: 0.5rem;
+        }
+        .smart-grid-module-card .module-icon {
+            color: var(--walmart-blue-primary);
+            margin-right: 0.75rem;
+        }
+        .smart-grid-module-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0.5rem;
+        }
+        .smart-grid-module-card ul li {
+            font-size: 0.95rem;
+            color: var(--walmart-gray-medium);
+            margin-bottom: 0.25rem;
+        }
+        .crate-dance-feature-card {
+            background-color: var(--walmart-gray-light);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--walmart-blue-primary);
+        }
+        .crate-dance-feature-card h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--walmart-blue-dark);
+            margin-bottom: 0.75rem;
+        }
+        .crate-dance-feature-card .feature-icon {
+            color: var(--walmart-yellow-spark);
+            margin-right: 1rem;
+            font-size: 1.75rem;
+        }
+        .crate-dance-feature-card p {
+            color: var(--walmart-gray-medium);
+            font-size: 1rem;
+        }
+        .faa-intro-card {
+            background: linear-gradient(135deg, var(--walmart-blue-primary), var(--walmart-blue-dark));
+            color: white;
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .faa-intro-card .faa-title {
+            font-size: 2.75rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            color: white;
+        }
+        .faa-intro-card .faa-subtitle {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--walmart-yellow-spark);
+        }
+        .faa-intro-card .faa-point {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .faa-intro-card .faa-point-icon {
+            font-size: 2.5rem;
+            color: var(--walmart-yellow-spark);
+            margin-right: 1.5rem;
+            min-width: 2.5rem;
+        }
+        .faa-intro-card .faa-point-text {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: white;
+        }
+        .faa-intro-card .faa-point-text strong {
+            color: var(--walmart-yellow-spark);
+        }
+        .cta-button {
+            background-color: var(--walmart-yellow-spark);
+            color: var(--walmart-blue-dark);
+            font-weight: 900;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #E0A800; /* Darker Yellow */
+        }
+        .footer-links a {
+            color: var(--walmart-white);
+        }
+        .footer-links a:hover {
+            color: var(--walmart-yellow-spark);
+        }
+        .copyright-text {
+            color: rgba(255, 255, 255, 0.7); /* Lighter white for copyright */
+        }
+
+        /* Responsive Adjustments (from original dashboard CSS, adapted) */
+        @media (max-width: 1024px) {
+            .dashboard-sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--walmart-border-light);
+                padding-bottom: 1rem;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            .dashboard-sidebar-nav-item {
+                flex-grow: 1;
+                justify-content: center;
+                font-size: 0.9rem;
+                padding: 0.5rem;
+            }
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .dashboard-main-content {
+                width: 100%;
+            }
+            .grid-cols-2-md {
+                grid-template-columns: 1fr;
+            }
+            .main-content-wrapper {
+                flex-direction: column;
+            }
+            .music-sub-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--walmart-border-light);
+                padding-bottom: 1rem;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 0.5rem 1rem;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            header .flex.items-center.space-x-4 {
+                width: 100%;
+                justify-content: center;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            header .logo-group {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 0.5rem;
+            }
+            header nav {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 0.5rem;
+                flex-wrap: wrap;
+            }
+            header nav a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            .logo-group {
+                gap: 0.5rem;
+            }
+            .logo-group .logo-fruitful, .logo-group .logo-seedwave { font-size: 1.2rem; }
+            .logo-separator { font-size: 1rem; }
+            #header-pulse-canvas { display: none; }
+            .mindlift-hero h1 { font-size: 2.8rem; }
+            .mindlift-hero p { font-size: 1.2rem; }
+            .global-pulse-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, 1fr);
+                max-height: none;
+            }
+            .section-title { font-size: 2.2rem; }
+            .section-padding { padding: 4rem 1rem; }
+            .metrics-grid, .whimsical-card-grid, .feature-grid, .metadata-metrics-grid, .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .metric-card-icon { font-size: 3rem; }
+            .metric-card h3 { font-size: 1.5rem; }
+            .metric-value { font-size: 2.2rem; }
+            .whimsical-icon { font-size: 3.5rem; }
+            .whimsical-card h3 { font-size: 1.8rem; }
+            .whimsical-card p { font-size: 1rem; }
+            .currency-converter-section { padding: 2rem; }
+            .currency-converter-section h2 { font-size: 2rem; }
+            .pricing-card { padding: 30px; }
+            .pricing-card h3 { font-size: 1.6rem; }
+            .pricing-card .price { font-size: 2rem; }
+            .spotify-controls { flex-direction: column; }
+            #node-pulse-graph .w-full { padding: 10px; }
+            .ai-help-section h3 { font-size: 1.3rem; flex-direction: column; text-align: center; }
+            .ai-help-section h3 i { margin-right: 0; margin-bottom: 10px; }
+            #planet-text { font-size: 1.5rem; }
+            .new-footer { padding: 1.5rem; }
+            .banimal-footer-content h1 { font-size: 2.25rem; }
+            .banimal-footer-content p { font-size: 0.9rem; }
+            .new-footer .cta-button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+
+            .checkout-header h1 {
+                font-size: 2.5rem;
+            }
+            .checkout-header .slogan {
+                font-size: 1.1rem;
+            }
+            .checkout-step-text {
+                font-size: 0.75rem;
+            }
+            .checkout-step-number {
+                width: 30px;
+                height: 30px;
+                font-size: 0.8rem;
+            }
+            .form-input, .form-select {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            .checkout-action-button {
+                height: 48px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-walmart-gray-light text-walmart-gray-dark flex flex-col">
+
+    <!-- Header -->
+    <header class="dashboard-header-bg p-4 shadow-lg sticky top-0 z-50 flex items-center justify-between border-b border-walmart-border-light">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-handshake text-3xl text-walmart-yellow-spark"></i>
+            <span class="text-2xl font-bold text-walmart-white">King Price Strategic Dashboard</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <input
+                type="text"
+                placeholder="Search..."
+                class="px-4 py-2 rounded-full bg-walmart-blue-dark border border-walmart-blue-primary text-walmart-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-walmart-yellow-spark"
+            >
+            <button class="text-walmart-white hover:text-walmart-yellow-spark transition duration-200">
+                <i class="fas fa-bell text-xl"></i>
+            </button>
+            <button class="text-walmart-white hover:text-walmart-yellow-spark transition duration-200">
+                <i class="fas fa-user-circle text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <div class="flex flex-grow dashboard-container">
+        <!-- Dashboard Sidebar Navigation -->
+        <nav class="sidebar-bg w-64 p-6 flex flex-col items-start space-y-4 shadow-md">
+            <h2 class="text-xl font-semibold dashboard-primary-text mb-4">Sections</h2>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light active" onclick="showSection('overview-king-price')">
+                <i class="fas fa-chart-bar"></i> Overview
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('faa-partnership-section')">
+                <i class="fas fa-handshake"></i> FAA™ Partnership
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('products-portfolio')">
+                <i class="fas fa-box"></i> Product Portfolio
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('market-and-growth')">
+                <i class="fas fa-chart-line"></i> Market & Growth
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('swot-analysis')">
+                <i class="fas fa-lightbulb"></i> SWOT Analysis
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('strategic-focus')">
+                <i class="fas fa-bullseye"></i> Strategic Focus
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('smart-grid-details')">
+                <i class="fas fa-network-wired"></i> Smart Grid Details
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('sponsorship-packages')">
+                <i class="fas fa-hand-holding-usd"></i> Sponsorship Packages
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('value-giving-loop')">
+                <i class="fas fa-heart"></i> Value Giving Loop
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('financial-projections')">
+                <i class="fas fa-chart-pie"></i> Financial Projections
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('crate-manufacturing')">
+                <i class="fas fa-boxes"></i> Crate Mfg.
+            </a>
+            <a href="#" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-walmart-gray-dark hover:bg-hover-bg-light" onclick="showSection('bbbee-advantage')">
+                <i class="fas fa-award"></i> B-BBEE Advantage
+            </a>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow p-8 main-content-bg overflow-y-auto">
+            <!-- Overview Section -->
+            <section id="overview-king-price" class="content-section mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">King Price™ Overview</h2>
+                <p class="text-muted mb-4">A snapshot of King Price Insurance's core strengths and market position.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">R5.2B</div>
+                        <div class="kpi-label text-xl mt-2">Company Valuation</div>
+                    </div>
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">>20%</div>
+                        <div class="kpi-label text-xl mt-2">Sustained Growth</div>
+                    </div>
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">57%</div>
+                        <div class="kpi-label text-xl mt-2">Positive Sentiment</div>
+                    </div>
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">R701M+</div>
+                        <div class="kpi-label text-xl mt-2">Charitable Donations</div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Core Strengths & Market Differentiators</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="card">
+                            <h4 class="text-xl font-bold dashboard-secondary-text mb-3">Disruptive Product Model</h4>
+                            <ul class="list-none text-left space-y-2 text-muted">
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>World-first monthly decreasing car premiums.</li>
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>Innovative R1 Insurance add-ons.</li>
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>"Pay per k" for collectable cars.</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h4 class="text-xl font-bold dashboard-secondary-text mb-3">Customer-Centricity & Trust</h4>
+                            <ul class="list-none text-left space-y-2 text-muted">
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>Recognized for "best customer experience" in SA.</li>
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>Voted "most trusted insurer" by HelloPeter.</li>
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>57% positive sentiment score.</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h4 class="text-xl font-bold dashboard-secondary-text mb-3">Technological Agility & AI Leadership</h4>
+                            <ul class="list-none text-left space-y-2 text-muted">
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>Proprietary rating engine.</li>
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>Advanced AI-powered contact center.</li>
+                                <li class="flex items-start"><span class="list-item-icon">✓</span>>24% of clients interact with AI.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAA & Fruitful Crate Dance Partnership Section -->
+            <section id="faa-partnership-section" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">The FAA™ & Fruitful Crate Dance™ Partnership</h2>
+                <p class="text-muted mb-4">A Game-Changing Opportunity for King Price™ to Dominate the Motor Industry and Drive Unprecedented Social Impact.</p>
+
+                <!-- Why This is Big: Introducing FAA™ - Styled like B-BBEE section -->
+                <div class="faa-intro-card mb-8">
+                    <h3 class="faa-title">Why This is Big: Introducing FAA™</h3>
+                    <p class="faa-subtitle">
+                        We are launching **FAA™**—a global, AI-driven, event-hosting powerhouse that is about to change the game. This isn't just big; it's **3X the global size of anything done before**. It's a high-energy, culture-driven movement set to engage **1 MILLION participants** across South Africa.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6">
+                        <div class="faa-point">
+                            <span class="faa-point-icon"><i class="fas fa-star"></i></span>
+                            <div class="faa-point-text">
+                                <h4 class="font-bold text-xl mb-1 text-white">Massive Scale:</h4>
+                                <p>500+ auditions nationwide, culminating in a Grand Final at Soccer City.</p>
+                            </div>
+                        </div>
+                        <div class="faa-point">
+                            <span class="faa-point-icon"><i class="fas fa-bullseye"></i></span>
+                            <div class="faa-point-text">
+                                <h4 class="font-bold text-xl mb-1 text-white">Precision Execution:</h4>
+                                <p>Full-scale execution at Atom Level—precision-driven, AI-backed, legally sound.</p>
+                            </div>
+                        </div>
+                        <div class="faa-point">
+                            <span class="faa-point-icon"><i class="fas fa-masks-theater"></i></span>
+                            <div class="faa-point-text">
+                                <h4 class="font-bold text-xl mb-1 text-white">Cultural Phenomenon:</h4>
+                                <p>Transforms crate dancing, a grassroots art form, into a nationwide movement that uplifts youth and builds cultural and economic momentum.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Why King Price™ Should Take the Throne</h3>
+                    <p class="text-muted mb-4">
+                        To dominate South Africa's motor industry—from Ford, Mazda, Toyota, Nissan, Penta Motor Group, to every dealership, supplier, and vendor—we need a powerful industry leader to align with. King Price™ is that leader.
+                    </p>
+                    <ul class="list-none text-left space-y-4 text-muted">
+                        <li class="pitch-point">
+                            <span class="pitch-icon">👑</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Exclusive Insurance Sponsorship:</h4>
+                                <p>King Price™ locks in a **monopoly on event sponsorships in the motor industry**. This is not just a sponsorship; it's a strategic acquisition of the entire sector's event engagement.</p>
+                            </div>
+                        </li>
+                        <li class="pitch-point">
+                            <span class="pitch-icon">🤝</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Mandatory Dealership & Vendor Alignment:</h4>
+                                <p>Every dealership & vendor sponsors through King Price™—meaning **no King Price™ = no sponsorship = no entry**. This creates an unparalleled funnel for new business.</p>
+                            </div>
+                        </li>
+                        <li class="pitch-point">
+                            <span class="pitch-icon">📊</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Direct Data & Metrics:</h4>
+                                <p>Access to invaluable data from our sign-up forms (www.fruitfulcratedance.com), fully compliant with legal frameworks and unlocking the rural market.</p>
+                            </div>
+                        </li>
+                        <li class="pitch-point">
+                            <span class="pitch-icon">📦</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Branded Crates with 20-Year Lifecycle:</h4>
+                                <p>Over **400,000+ crates** featuring King Price™ branding will circulate in high-visibility urban & rural areas. These are not just props; they are long-term, mobile billboards. **Mpack manufacturers provide a 20-year recycling commitment, with an estimated cost of R71.50 excl. per crate.**</p>
+                            </div>
+                        </li>
+                        <li class="pitch-point">
+                            <span class="pitch-icon">👨‍👩‍👧‍👦</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Family-First Insurance Plans:</h4>
+                                <p>Targeting **400,000+ new signups** through funeral cover, family insurance, and seamless dealership integrations, tapping into a massive, underserved market.</p>
+                            </div>
+                        </li>
+                        <li class="pitch-point">
+                            <span class="pitch-icon">🎬</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Showmax & Netflix Documentary Involvement:</h4>
+                                <p>King Price™ is involved at ground level, **owning national & international exposure** through a high-profile documentary series.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Product Portfolio Section -->
+            <section id="products-portfolio" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Comprehensive Product Portfolio</h2>
+                <p class="text-muted mb-4">King Price™ offers a diverse range of innovative insurance solutions across personal, commercial, and life segments.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card border-t-4 border-walmart-yellow-spark">
+                        <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Personal Insurance 🚗</h3>
+                        <ul class="list-disc list-inside text-left space-y-2 text-muted flex-grow">
+                            <li>**Car Insurance:** Comprehensive, Agreed Value, Theft & Write-off, Third Party.</li>
+                            <li>**R1 Insurance:** Add-on for bicycles, golf clubs, hearing aids, motorbike gear.</li>
+                            <li>**Personal Accident:** Lump sum for disability/accidental death.</li>
+                            <li>Home contents, buildings, specialized items, portable possessions.</li>
+                        </ul>
+                    </div>
+                    <div class="card border-t-4 border-walmart-green-forest">
+                        <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Commercial Insurance 🏢</h3>
+                        <ul class="list-disc list-inside text-left space-y-2 text-muted flex-grow">
+                            <li>**Agri Insurance:** Crops, livestock, "Pay as you farm" for vehicles.</li>
+                            <li>**Business Insurance:** All Risk, Motor, Office Contents, Business Interruption.</li>
+                            <li>**Community Insurance:** For schemes, includes fidelity & public liability.</li>
+                            <li>**Engineering Insurance:** Contractors All Risk, Plant All Risk, Electronic Equipment.</li>
+                            <li>Exclusively via broker network for tailored advice.</li>
+                        </ul>
+                    </div>
+                    <div class="card border-t-4 border-walmart-blue-primary">
+                        <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Life Insurance (King Price Livin'™) ❤️</h3>
+                        <ul class="list-disc list-inside text-left space-y-2 text-muted flex-grow">
+                            <li>**Funeral Cover:** Up to R100,000, doubles for accidental death.</li>
+                            <li>**Life & Credit Life:** Various credit life & employee benefits.</li>
+                            <li>**Employee Benefits:** Group life, disability, critical illness.</li>
+                            <li>**Estate Product:** Financial protection, covers legal/admin costs.</li>
+                            <li>Ambitious goal to insure 5 million lives within 5 years.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Market Position & Growth Section -->
+            <section id="market-and-growth" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Market Position & Growth Trajectory</h2>
+                <p class="text-muted mb-4">King Price™ continues its impressive growth, disrupting a competitive market and expanding its global footprint.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">R5.2B</div>
+                        <div class="kpi-label text-xl mt-2">Company Valuation</div>
+                    </div>
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">R4B</div>
+                        <div class="kpi-label text-xl mt-2">FY22 Gross Premium Income</div>
+                    </div>
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">40%</div>
+                        <div class="kpi-label text-xl mt-2">Highest YoY Growth (2019)</div>
+                    </div>
+                    <div class="card p-6 text-center">
+                        <div class="kpi-value text-5xl">Namibia</div>
+                        <div class="kpi-label text-xl mt-2">Fastest Growing Insurer</div>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Global Ambition: easySure™ in Europe</h3>
+                    <p class="max-w-2xl mx-auto text-muted">
+                        King Price™ is strategically expanding into Europe under the 'easySure™' brand, leveraging the internationally recognized 'easy' name. This move positions them as a global insurtech innovator, aiming to export their disruptive model and tech-driven approach beyond South Africa.
+                    </p>
+                </div>
+            </section>
+
+            <!-- SWOT Analysis Section -->
+            <section id="swot-analysis" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Strategic Outlook: SWOT Summary</h2>
+                <p class="text-muted mb-4">A concise overview of King Price's™ internal capabilities and external market dynamics.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Strengths</h3>
+                        <ul class="list-disc list-inside text-left space-y-2 text-muted">
+                            <li>Innovative decreasing premium model.</li>
+                            <li>High customer trust and positive sentiment.</li>
+                            <li>Advanced technological agility and AI investment.</li>
+                            <li>Strong brand identity and unique marketing.</li>
+                            <li>Rapid, sustained market share growth.</li>
+                            <li>Deep social impact and purpose-driven culture.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Weaknesses</h3>
+                        <ul class="list-disc list-inside text-left space-y-2 text-muted">
+                            <li>Reported policy transparency issues (excesses, driver declarations).</li>
+                            <li>Premium increases at renewal causing customer friction.</li>
+                            <li>Reliance on brokers for commercial lines.</li>
+                            <li>Potential for misunderstanding complex offers.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Opportunities</h3>
+                        <ul class="list-disc list-inside text-left space-y-2 text-muted">
+                            <li>Massive growth potential in Life Insurance (5M lives goal).</li>
+                            <li>International expansion (easySure™ in Europe, other continents).</li>
+                            <li>Deeper AI leverage for hyper-personalization & self-service.</li>
+                            <li>Innovation in risk mitigation (climate, cyber).</li>
+                            <li>**Partnership with B-BBEE Level 1, 100% black-owned supplier.**</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Threats</h3>
+                        <ul class="list-disc list-inside text-left space-y-2 text-muted">
+                            <li>Intense competition from established SA players.</li>
+                            <li>SA economic instability and high inflation.</li>
+                            <li>Deteriorating national infrastructure (loadshedding, water).</li>
+                            <li>Growing sophistication of cyber threats.</li>
+                            <li>Regulatory changes and reputational risk.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Strategic Focus Areas Section -->
+            <section id="strategic-focus" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Strategic Focus Areas for Continued Leadership</h2>
+                <p class="text-muted mb-4">To solidify its market position and fully realize its "Higher purpose," King Price™ should prioritize these key areas.</p>
+                <div class="card text-left max-w-4xl mx-auto p-8">
+                    <ul class="space-y-5">
+                        <li class="flex items-start">
+                            <span class="text-3xl text-accent-green mr-4">1.</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Enhance Policy Transparency & Clarity</h4>
+                                <p class="text-muted">Implement clearer, mandatory disclosures for excesses and simplify policy wording. Develop dynamic systems for declaring occasional drivers to prevent claim issues.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-3xl text-accent-green mr-4">2.</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Optimize Premium Renewal Strategy</h4>
+                                <p class="text-muted">Proactively communicate renewal changes with detailed reasons. Leverage data for personalized offers and introduce loyalty incentives for claim-free clients across all product lines.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-3xl text-accent-green mr-4">3.</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Deepen AI for Proactive Customer Engagement</h4>
+                                <p class="text-muted">Expand AI-driven proactive outreach based on predictive analytics. Develop end-to-end self-service journeys across all digital channels, freeing agents for complex issues.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-3xl text-accent-green mr-4">4.</span>
+                            <div>
+                                <h4 class="font-bold text-xl dashboard-primary-text">Forge Strategic Partnerships</h4>
+                                <p class="text-muted">Invest in targeted broker enablement programs. Explore collaborations with InsurTechs for emerging risks (cyber, climate). Engage with communities for proactive risk mitigation programs.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Smart Grid Details Section -->
+            <section id="smart-grid-details" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">The Fruitful Crate Dance™ Smart Grid</h2>
+                <p class="text-muted mb-4">This comprehensive, AI-driven digital ecosystem is the backbone supporting the entire Fruitful Crate Dance™ movement, ensuring precision, scalability, and measurable impact.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-home module-icon"></i> Home (Landing Page)</h4>
+                        <p class="text-muted text-sm">Dynamic hero image with dancing crates, rotating sponsor banners, brief welcome text. Features animated Fruitful™ tree, crate dancers, and a call-to-action to join the movement.</p>
+                        <ul class="mt-2">
+                            <li>- Welcome Banner: Animated Fruitful™ tree + crate dancers scene</li>
+                            <li>- Brand Loop: Auto-loop of sponsors (Pepsi, KFC, Shoprite)</li>
+                            <li>- Scroll Trigger: Scrolls to Events / Modules</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-calendar-alt module-icon"></i> Events Page</h4>
+                        <p class="text-muted text-sm">Show upcoming Crate Dance™ events, including auditions, regional showcases, and brand collaborations.</p>
+                        <ul class="mt-2">
+                            <li>- Event Grid: Interactive map + event cards</li>
+                            <li>- Register CTA: Button linked to onboarding portal</li>
+                            <li>- Archive: Past events and winners</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-shield-alt module-icon"></i> FAA Edge™ Compliance Core</h4>
+                        <p class="text-muted text-sm">The legal and verification backbone, ensuring FAA™ Inline Verification™ for all actions. **Current Status: Complete (coded).**</p>
+                        <ul class="mt-2">
+                            <li>- FAA™ Inline Verification™ Protocol Dashboard</li>
+                            <li>- Legal Ledger for IP Actions</li>
+                            <li>- Secure Payment & Contract Chain</li>
+                            <li>- Sponsor Legal Tier Interface</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-user-plus module-icon"></i> Partner Onboarding Portal</h4>
+                        <p class="text-muted text-sm">Facilitates registration, licensing, and sponsorship, with tiered Crate Levels and a comprehensive sponsor gateway. **Current Status: Ready for export.**</p>
+                        <ul class="mt-2">
+                            <li>- Crate Tier Selection (1–5)</li>
+                            <li>- Sponsorship Application Portal</li>
+                            <li>- Vendor Licensing Module</li>
+                            <li>- Regional Logic Gate Manager</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-store module-icon"></i> Fruitful Marketplace Core</h4>
+                        <p class="text-muted text-sm">Manages product display and checkout, with logic-based personalization for Crate, Banimal™, and Samfox™ items. **Current Status: Integration-ready.**</p>
+                        <ul class="mt-2">
+                            <li>- Featured Product Grid</li>
+                            <li>- Banimal™ Merch Showcase</li>
+                            <li>- Samfox™ Apparel Scroll</li>
+                            <li>- Logic-Based Personalization Filter</li>
+                            <li>- Checkout Sponsorship Route</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-street-view module-icon"></i> Showcase Management Engine</h4>
+                        <p class="text-muted text-sm">The street activation layer, managing Crate Dance™ events, brand panel placement, and cultural traffic logs. **Current Status: Blueprint ready.**</p>
+                        <ul class="mt-2">
+                            <li>- Crate Activation Schedule</li>
+                            <li>- Brand Integration Overlay</li>
+                            <li>- City-Specific Showcase Roster</li>
+                            <li>- Measurable Footprint Tracker</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-palette module-icon"></i> Design Competition Engine</h4>
+                        <p class="text-muted text-sm">Handles apparel/crate/user design intake, with Myth Compass™ + Lore AI score = payout, printing rights. **Current Status: Logic built, UI pending.**</p>
+                        <ul class="mt-2">
+                            <li>- Design Submission Page</li>
+                            <li>- Lore AI + Myth Compass™ Dashboard</li>
+                            <li>- Winner Licensing Display</li>
+                            <li>- Crate Printing Pipeline</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-hand-holding-heart module-icon"></i> Banimal™ Giving Loop</h4>
+                        <p class="text-muted text-sm">The child-facing donation and reward system: 1 purchase = 1 meal + 1 Kind Creatures Archive entry. **Current Status: Structure set.**</p>
+                        <ul class="mt-2">
+                            <li>- Meal Tracker + Stats</li>
+                            <li>- Kind Creatures Archive Grid</li>
+                            <li>- NGO Partner List</li>
+                            <li>- Real-Time Child Feed Log</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-chart-pie module-icon"></i> Crate Intelligence Grid</h4>
+                        <p class="text-muted text-sm">Real-time dashboard metrics, including logic spread, riddle patterns, and LSM data. **Current Status: Backend queued.**</p>
+                        <ul class="mt-2">
+                            <li>- Riddle Pattern Map</li>
+                            <li>- Crate Reach Analytics (by race, age, region)</li>
+                            <li>- NGO Impact Tracker</li>
+                            <li>- Design Spread Grid</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-brain module-icon"></i> Myth Tech Stack (Optional Layer)</h4>
+                        <p class="text-muted text-sm">Provides immersive AI + digital relics, including GPS-tracked crates, Foxed AI™, NFT riddles, and digital scrolls. **Current Status: Concept finalized.**</p>
+                        <ul class="mt-2">
+                            <li>- GPS Tracked Crates Map</li>
+                            <li>- NFT Myth Riddle Collection</li>
+                            <li>- Foxed AI™ Avatar Summons</li>
+                            <li>- Digital Scroll Archive</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-tshirt module-icon"></i> Foxed™ Design Relay Node</h4>
+                        <p class="text-muted text-sm">Manages 1/1 apparel logic drop, with Myth Compass™ scoring → rare reward drop. **Current Status: Logic defined, UI pending.**</p>
+                        <ul class="mt-2">
+                            <li>- Rare Drop Archive</li>
+                            <li>- Scoring Thresholds</li>
+                            <li>- Claim Page (Token Gate)</li>
+                            <li>- Hall of Foxed Legends</li>
+                        </ul>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-map-marked-alt module-icon"></i> Regional Deployment Model</h4>
+                        <p class="text-muted text-sm">Details regional roles: South Africa (IP HQ + Tier 1 shows), Nigeria (Brand pilot, vendor entry), Brazil (Event ready region), Japan (Utility crate innovation).</p>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-sync-alt module-icon"></i> Sponsor Logic Loop</h4>
+                        <p class="text-muted text-sm">Defines input triggers and outputs: $1 Sponsor Payment → 1 child insight fed, data logged; Crate Dance Tier 1 → Brand or NGO logic, cost saving, discount unlocked; Banimal™ Sale → Meal + riddle + reef unlock; Design Entry → Myth Compass™ score, licensing reward.</p>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-lock module-icon"></i> IP Governance + Licensing Grid</h4>
+                        <p class="text-muted text-sm">Outlines protection and export methods for IP elements: Crate Dance™ Brand (Sovereign, License Tiers), Banimal™ (Common Law, TM, Myth Pack™ Protocol), Samfox™ (FAA Internal, Controlled Office Merch Logic Grid), FAA Cognitive Lock (Not for resale).</p>
+                    </div>
+                    <div class="smart-grid-module-card">
+                        <h4 class="flex items-center"><i class="fas fa-code-branch module-icon"></i> Next Modules (Pipeline)</h4>
+                        <p class="text-muted text-sm">Future development pipeline: Investor Deck (HIGH), Sponsor Dashboard (MED), Story Capture Engine (MED), Myth Riddle Packs (READY), Crate ROI Tracker (HIGH), Foxed Mobile Deployment (HIGH), Logic Grid Sync Engine (MED), Live CrateCam™ Feed (HIGH).</p>
+                    </ul>
+                </div>
+                <div class="text-center mt-8">
+                    <p class="text-lg font-semibold text-muted">FAA™ Systems online. Crates are live.</p>
+                    <p class="text-xl font-bold text-walmart-blue-primary">Let’s shake the grid.</p>
+                </div>
+            </section>
+
+            <!-- Sponsorship Packages Section -->
+            <section id="sponsorship-packages" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Fruitful Crate Dance™ Sponsorship Packages</h2>
+                <p class="text-muted mb-4">Invest in a movement that empowers communities and creates tangible change. Our packages offer unparalleled brand visibility while directly funding meals for children in need through our transparent Value Giving Loop.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Bronze Tier -->
+                    <div class="tier-card p-6">
+                        <h3 class="text-2xl font-bold text-center text-walmart-gray-dark">Bronze</h3>
+                        <p class="text-center text-walmart-gray-medium mb-6">Starter Impact</p>
+                        <div class="text-center my-4">
+                            <span class="text-4xl font-extrabold">R500k</span>
+                            <span class="text-walmart-gray-medium">/ year</span>
+                        </div>
+                        <ul class="benefit-list mt-6 flex-grow">
+                            <li><i class="fas fa-check-circle"></i>Logo on event website</li>
+                            <li><i class="fas fa-check-circle"></i>Social media mention</li>
+                            <li><i class="fas fa-check-circle"></i>Brand mention in event program</li>
+                            <li><i class="fas fa-check-circle"></i>4x VIP Event Tickets</li>
+                        </ul>
+                        <button class="mt-6 block w-full text-center bg-walmart-blue-primary hover:bg-walmart-blue-dark text-white font-semibold py-3 rounded-lg transition-colors" onclick="selectPackage('Bronze', 500000)">Proceed to Payment</button>
+                    </div>
+
+                    <!-- Silver Tier -->
+                    <div class="tier-card p-6 border-2 border-walmart-blue-primary shadow-xl relative">
+                        <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-walmart-blue-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Most Popular</span>
+                        <h3 class="text-2xl font-bold text-center text-walmart-blue-primary">Silver</h3>
+                        <p class="text-center text-walmart-gray-medium mb-6">Regional Partner</p>
+                        <div class="text-center my-4">
+                            <span class="text-4xl font-extrabold">R1.5M</span>
+                            <span class="text-walmart-gray-medium">/ year</span>
+                        </div>
+                        <ul class="benefit-list mt-6 flex-grow">
+                            <li><i class="fas fa-check-circle"></i>All Bronze benefits, plus:</li>
+                            <li><i class="fas fa-check-circle"></i>Logo on regional marketing materials</li>
+                            <li><i class="fas fa-check-circle"></i>Dedicated social media post</li>
+                            <li><i class="fas fa-check-circle"></i>On-site activation space</li>
+                            <li><i class="fas fa-check-circle"></i>10x VIP Event Tickets</li>
+                        </ul>
+                        <button class="mt-6 block w-full text-center bg-walmart-blue-dark hover:bg-walmart-blue-primary text-white font-semibold py-3 rounded-lg transition-colors" onclick="selectPackage('Silver', 1500000)">Proceed to Payment</button>
+                    </div>
+
+                    <!-- Gold Tier -->
+                    <div class="tier-card p-6">
+                        <h3 class="text-2xl font-bold text-center text-walmart-gray-dark">Gold</h3>
+                        <p class="text-center text-walmart-gray-medium mb-6">Premier Partner</p>
+                        <div class="text-center my-4">
+                            <span class="text-4xl font-extrabold">R2.5M</span>
+                            <span class="text-walmart-gray-medium">/ year</span>
+                        </div>
+                        <ul class="benefit-list mt-6 flex-grow">
+                            <li><i class="fas fa-check-circle"></i>All Silver benefits, plus:</li>
+                            <li><i class="fas fa-check-circle"></i>Prominent logo on main stage</li>
+                            <li><i class="fas fa-check-circle"></i>Inclusion in press releases</li>
+                            <li><i class="fas fa-check-circle"></i>Video ad spot during event</li>
+                            <li><i class="fas fa-check-circle"></i>20x VIP Event Tickets</li>
+                        </ul>
+                        <button class="mt-6 block w-full text-center bg-walmart-blue-primary hover:bg-walmart-blue-dark text-white font-semibold py-3 rounded-lg transition-colors" onclick="selectPackage('Gold', 2500000)">Proceed to Payment</button>
+                    </div>
+
+                    <!-- National Sponsor Tier -->
+                    <div class="tier-card p-6">
+                        <h3 class="text-2xl font-bold text-center text-walmart-gray-dark">National</h3>
+                        <p class="text-center text-walmart-gray-medium mb-6">Headline Partner</p>
+                        <div class="text-center my-4">
+                            <span class="text-4xl font-extrabold">R5M+</span>
+                            <span class="text-walmart-gray-medium">/ year</span>
+                        </div>
+                        <ul class="benefit-list mt-6 flex-grow">
+                            <li><i class="fas fa-check-circle"></i>All Gold benefits, plus:</li>
+                            <li><i class="fas fa-check-circle"></i>"Presented by" naming rights</li>
+                            <li><i class="fas fa-check-circle"></i>Category exclusivity</li>
+                            <li><i class="fas fa-check-circle"></i>Custom content series</li>
+                            <li><i class="fas fa-check-circle"></i>Bespoke VIP hospitality experience</li>
+                        </ul>
+                        <button class="mt-6 block w-full text-center bg-walmart-blue-primary hover:bg-walmart-blue-dark text-white font-semibold py-3 rounded-lg transition-colors" onclick="selectPackage('National', 5000000)">Contact Us for Payment</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Value Giving Loop Section -->
+            <section id="value-giving-loop" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">The Value-for-Value Giving Loop</h2>
+                <p class="text-muted mb-4">Your sponsorship isn't just a marketing expense—it's a direct investment in social good. We've simplified the impact: every R100 you invest provides a meal for a child. This transparent model allows you to see the real-world difference your support makes.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="dashboard-card-bg p-8 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold mb-4 text-center dashboard-primary-text">How It Works</h3>
+                        <div class="flex flex-col items-center space-y-4">
+                            <div class="flex items-center w-full">
+                                <div class="flex-shrink-0 bg-walmart-blue-primary text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">1</div>
+                                <p class="ml-4 text-muted">Your brand becomes a <span class="font-bold">Sponsor</span>.</p>
+                            </div>
+                            <div class="h-10 w-px bg-walmart-border-light"></div>
+                            <div class="flex items-center w-full">
+                                <div class="flex-shrink-0 bg-walmart-blue-primary text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">2</div>
+                                <p class="ml-4 text-muted">A portion of your investment directly funds the <span class="font-bold">Banimal™ Giving Loop.</span></p>
+                            </div>
+                            <div class="h-10 w-px bg-walmart-border-light"></div>
+                            <div class="flex items-center w-full">
+                                <div class="flex-shrink-0 bg-walmart-green-forest text-white rounded-full h-12 w-12 flex items-center justify-center font-bold text-xl">3</div>
+                                <p class="ml-4 text-muted">A child in need receives a nutritious <span class="font-bold">meal or essential item.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="valueLoopChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Financial Projections Section -->
+            <section id="financial-projections" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Financial Projections & Revenue Streams</h2>
+                <p class="text-muted mb-4">Our model is built for sustainable growth, ensuring long-term impact. Projections indicate a robust R406 million revenue over the next five years, driven by a diversified portfolio of income sources.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="dashboard-card-bg p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4 dashboard-primary-text">5-Year Revenue Projection</h3>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="revenueProjectionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="dashboard-card-bg p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4 dashboard-primary-text">Revenue Breakdown</h3>
+                        <div class="chart-container" style="height: 300px;">
+                            <canvas id="revenueBreakdownChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Crate Manufacturing Section -->
+            <section id="crate-manufacturing" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Crate Manufacturing Partnership: Mpact Plastic Containers</h2>
+                <p class="text-muted mb-4">Our collaboration with Mpact Plastic Containers (MPC) ensures the highest quality, sustainable, and B-BBEE compliant production of the Fruitful Crate Dance™ branded crates.</p>
+
+                <div class="card p-8 bg-walmart-gray-light border-l-4 border-walmart-green-forest">
+                    <h3 class="text-2xl font-bold dashboard-primary-text mb-4">Mpact Plastic Containers: A Leader in Sustainable Manufacturing</h3>
+                    <p class="text-muted mb-4">
+                        Mpact Plastic Containers (MPC), a division of the Mpact Limited Group, is the **leading supplier of plastic containers, crates, and pallets in Southern Africa**. Their expertise is critical to the scale and impact of the Fruitful Crate Dance™ movement.
+                    </p>
+                    <ul class="list-none text-left space-y-3 text-muted">
+                        <li class="flex items-start"><span class="pitch-icon">🏭</span>**Extensive Manufacturing Capacity:** With three state-of-the-art plants in Atlantis (Western Cape), Brits (North West), and Castleview (Gauteng), MPC possesses the capacity to produce the **400,000+ branded crates** required for our nationwide activation.</li>
+                        <li class="flex items-start"><span class="pitch-icon">♻️</span>**20-Year Recycling Commitment:** MPC is deeply committed to the circular economy. They provide a **20-year recycling commitment** for the crates, ensuring their long-term sustainability and minimizing environmental impact through their buy-back and exchange model. This aligns perfectly with King Price's™ ESG goals.</li>
+                        <li class="flex items-start"><span class="pitch-icon">🏅</span>**Quality & Innovation:** MPC is renowned for producing durable, high-quality, and innovative plastic products. Their crates are designed for multi-trip, reusable purposes, forming the largest range of Returnable Transit Containers in South Africa.</li>
+                        <li class="flex items-start"><span class="pitch-icon">🇿🇦</span>**B-BBEE Level 1 Supplier:** As a **B-BBEE Level 1 contributor** (via Mpact Versapak, part of the group), partnering with MPC further enhances King Price's™ B-BBEE scorecard, reinforcing its commitment to local economic empowerment and transformation.</li>
+                        <li class="flex items-start"><span class="pitch-icon">💰</span>**Cost-Effective Scale:** The estimated cost for the branded crates is **R71.50 excl. per crate**. This competitive pricing, combined with MPC's manufacturing prowess and recycling commitment, ensures a cost-effective and sustainable solution for the massive scale of the project.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- B-BBEE Advantage Section -->
+            <section id="bbbee-advantage" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Strategic Partnership Advantage: B-BBEE Level 1</h2>
+                <p class="text-muted mb-4">Our partnership brings an unparalleled strategic advantage: Fruitful Holdings™ is a **B-BBEE Level 1 contributor and 100% black-owned**.</p>
+
+                <div class="bbbee-section-card mt-8">
+                    <h3 class="bbbee-title">The Ultimate Strategic Edge:</h3>
+                    <p class="bbbee-subtitle">B-BBEE Level 1 & 100% Black-Owned Partnership</p>
+                    <p class="text-white text-lg mb-8 max-w-3xl mx-auto opacity-90">
+                        This partnership is not just a strategic alignment; it's a **profound commitment to South Africa's economic future**. Fruitful Holdings™ offers King Price™ an unparalleled opportunity to lead in inclusive growth and amplify its social impact, setting a new standard for corporate responsibility.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                        <div class="bbbee-point">
+                            <span class="bbbee-point-icon"><i class="fas fa-chart-line"></i></span>
+                            <div class="bbbee-point-text">
+                                <h4 class="font-bold text-xl mb-1 text-walmart-yellow-spark">Maximized B-BBEE Scorecard Contribution:</h4>
+                                <p>Directly and significantly boosts King Price's™ **procurement and socio-economic development elements**, ensuring compliance and leadership in transformation.</p>
+                            </div>
+                        </div>
+                        <div class="bbbee-point">
+                            <span class="bbbee-point-icon"><i class="fas fa-handshake"></i></span>
+                            <div class="bbbee-point-text">
+                                <h4 class="font-bold text-xl mb-1 text-walmart-yellow-spark">Authentic & Measurable Social Impact:</h4>
+                                <p>Aligns perfectly with King Price's™ **'Higher purpose' vision**, translating investment into tangible black economic empowerment, job creation, and community upliftment.</p>
+                            </div>
+                        </div>
+                        <div class="bbbee-point">
+                            <span class="bbbee-point-icon"><i class="fas fa-users-rays"></i></span>
+                            <div class="bbbee-point-text">
+                                <h4 class="font-bold text-xl mb-1 text-walmart-yellow-spark">Deepened Market Penetration & Trust:</h4>
+                                <p>Establishes King Price™ as a true partner in national development, **strengthening credibility** and opening doors to vast, underserved rural and urban markets.</p>
+                            </div>
+                        </div>
+                        <div class="bbbee-point">
+                            <span class="bbbee-point-icon"><i class="fas fa-globe"></i></span>
+                            <div class="bbbee-point-text">
+                                <h4 class="font-bold text-xl mb-1 text-walmart-yellow-spark">Global ESG Leadership:</h4>
+                                <p>Positions King Price™ as a beacon of responsible corporate citizenship, demonstrating commitment to inclusive growth and **strong ESG principles** on a national and international stage.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Placeholder for other sections from the original dashboard template -->
+            <section id="analytics" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Data Analytics (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would display detailed analytics and performance metrics for the Fruitful Crate Dance™ project, including user engagement, geographical reach, and conversion funnels.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">Usage Trends</h3>
+                    <p class="text-muted">Graph showing daily user activity and data consumption.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Chart</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-panel" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Admin Panel (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would provide administrative controls for managing users, content, and system settings for the FAA™ platform.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">User Management</h3>
+                    <p class="text-muted">Table and controls for managing users.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Table</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="music" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Music & Media (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would showcase music and media content related to the Crate Dance™ project, potentially including Spotify integrations or custom audio/video players.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">Featured Tracks</h3>
+                    <p class="text-muted">Embedded Spotify players.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Music Embeds</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ai-gemini" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">AI Gemini Integration (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would feature interactive AI tools powered by Gemini, such as a general query assistant, coding partner, and career guide.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">AI Assistant</h3>
+                    <p class="text-muted">Interactive chat with Gemini AI.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder AI Chat</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="maps" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Interactive Maps (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would display interactive maps, potentially showing event locations, crate distribution, or regional impact data.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">Event Map</h3>
+                    <p class="text-muted">Map showing event locations.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Map</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="vaultmesh-checkout" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">VaultMesh Checkout (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would demonstrate the secure payment and checkout process for products and sponsorships within the FAA™ ecosystem.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">Checkout Flow</h3>
+                    <p class="text-muted">Simulated checkout process.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Checkout</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="meeting-minutes" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Meeting Minutes (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would contain records of key meetings, discussions, and decisions related to the project development.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">Recent Meeting Notes</h3>
+                    <p class="text-muted">Summary of meeting discussions.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Notes</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="api-keys-section" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">API Keys (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would provide information on API keys used across the platform, with a strong emphasis on security best practices.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">API Key Management</h3>
+                    <p class="text-muted">Details on API keys and security.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Keys</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="global-manuals-section" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Global Manuals (Placeholder)</h2>
+                <p class="text-muted mb-4">This section would host documentation and manuals for various aspects of the FAA™ ecosystem.</p>
+                <div class="p-5 bg-walmart-gray-light rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold dashboard-primary-text mb-2">Documentation Library</h3>
+                    <p class="text-muted">Access to manuals and guides.</p>
+                    <div class="mt-4 bg-walmart-border-light h-48 flex items-center justify-center rounded-md">
+                        <span class="text-muted">Placeholder Manuals</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Long-Term Community Development & Economic Empowerment -->
+            <section id="long-term-community" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Long-Term Community Development & Economic Empowerment</h2>
+                <p class="text-muted mb-4">This partnership extends beyond events, fostering sustainable livelihoods and community upliftment.</p>
+                <div class="card p-8">
+                    <ul class="list-none text-left space-y-3 text-muted">
+                        <li class="flex items-start"><span class="pitch-icon">🌱</span>**Fruitful Sekelbos Tank™:** A platform offering production spaces, mentorship, and branding support to local artists creating hand-crafted goods.</li>
+                        <li class="flex items-start"><span class="pitch-icon">🔗</span>**Market Access:** Connecting artists to corporate markets (Mr Price Home, Makro, Builders Warehouse, Woolworths) via Fruitful™, ensuring streamlined distribution and sustained income.</li>
+                        <li class="flex items-start"><span class="pitch-icon">🌍</span>**Global Engagement:** Inspire ongoing change through creativity as a tool for uplifting communities, creating unity, and driving local entrepreneurial growth.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Industry Domination Strategy & Global Ambition -->
+            <section id="industry-domination" class="content-section hidden mb-8 p-6 dashboard-card-bg rounded-lg shadow-xl">
+                <h2 class="text-3xl font-bold dashboard-primary-text mb-6">Industry Domination Strategy & Global Ambition</h2>
+                <p class="text-muted mb-4">This is not just about sponsoring an event—it’s about **owning a movement**.</p>
+                <div class="card p-8 bg-walmart-gray-light border-l-4 border-walmart-yellow-spark">
+                    <ul class="list-none text-left space-y-3 text-muted">
+                        <li class="flex items-start"><span class="pitch-icon">🏆</span>King Price™ positions itself as **THE go-to insurance provider for all dealerships** in South Africa.</li>
+                        <li class="flex items-start"><span class="pitch-icon">🎯</span>Direct access to **1M+ potential clients, families, and SME networks**.</li>
+                        <li class="flex items-start"><span class="pitch-icon"> exclusivity</span>**Exclusivity** in an industry-wide sponsorship model that sets King Price™ apart.</li>
+                        <li class="flex items-start"><span class="pitch-icon">🌐</span>While we’re already engaging Red Bull for global expansion, **every powerhouse starts at home**. Let’s own SA’s streets, intersections, and digital presence, just like OUTsurance did, before Europe, Southeast Asia, and the USA.</li>
+                    </ul>
+                </div>
+                <div class="text-center mt-12">
+                    <h3 class="text-3xl font-bold dashboard-primary-text mb-4">Let’s Make This Happen.</h3>
+                    <p class="text-xl text-muted max-w-3xl mx-auto mb-6">
+                        De Wet, this is it. Let’s take King Price™ to every car dealership, every billboard, every screen, and every household in South Africa.
+                    </p>
+                    <a href="#" class="inline-block cta-button">
+                        Let's Chat ASAP and Start Shaping This Together
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-walmart-blue-dark text-white py-8 px-6 text-center">
+        <div class="max-w-xl mx-auto mb-8">
+            <h1 class="text-4xl font-bold mb-2">Banimal™</h1>
+            <p class="text-walmart-white text-lg mb-4 opacity-80">Kind Creatures. Global Impact.</p>
+            <p class="text-walmart-white opacity-70">
+                Discover Banimal's™ world of thoughtful products. For every purchase, we deliver an essential item to a child in need, tracked and verified through the Baobab Security Network.
+            </p>
+            <div class="mt-6 flex justify-center space-x-4">
+                <a href="#" class="text-white hover:text-walmart-yellow-spark transition-colors"><i class="fab fa-facebook-f fa-lg"></i></a>
+                <a href="#" class="text-white hover:text-walmart-yellow-spark transition-colors"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-white hover:text-walmart-yellow-spark transition-colors"><i class="fab fa-instagram fa-lg"></i></a>
+            </div>
+        </div>
+        <div class="text-gray-300 text-sm">
+            <div class="footer-links flex flex-wrap justify-center mb-4 space-x-4">
+                <a href="https://footer.global.repo.seedwave.faa.zone/privacy.html" class="hover:text-white">Privacy</a>
+                <a href="https://footer.global.repo.seedwave.faa.zone/terms.html" class="hover:text-white">Terms</a>
+                <a href="https://footer.global.repo.seedwave.faa.zone/contact.html" class="hover:text-white">Contact</a>
+                <a href="https://faa.zone/" class="hover:text-white">FAA.Zone™</a>
+            </div>
+            <p class="copyright-text">© 2025 Banimal™.<span class="ml-1">A proud initiative of <a href="https://fruitful.faa.zone/" target="_blank" class="hover:underline">Fruitful™ Treaty System™</a></span></p>
+        </div>
+    </footer>
+
+    <script>
+        const walmartPalette = {
+            primaryBlue: '#0071CE',
+            darkBlue: '#004C91',
+            accentYellow: '#FFC220',
+            accentGreen: '#338B33',
+            lightGray: '#F8F8F8',
+            mediumGray: '#555555',
+            darkGray: '#333333'
+        };
+
+        const chartTooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+        
+        function wrapLabels(label, maxWidth) {
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxWidth) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = currentLine ? currentLine + ' ' + word : word;
+                }
+            });
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // --- Chart Data (adapted for Walmart colors) ---
+        // Moved inside DOMContentLoaded to ensure availability
+        let sponsorshipData;
+        let revenueProjectionData;
+        let revenueBreakdownData;
+
+        // --- Chart Creation Functions ---
+        let valueLoopChartInstance = null;
+        const createValueLoopChart = () => {
+            const ctx = document.getElementById('valueLoopChart');
+            if (!ctx) return; // Exit if canvas not found
+
+            if (valueLoopChartInstance) {
+                valueLoopChartInstance.destroy(); // Destroy existing chart instance
+            }
+
+            valueLoopChartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: sponsorshipData.labels,
+                    datasets: [
+                        {
+                            label: 'Investment (ZAR)',
+                            data: sponsorshipData.investment,
+                            backgroundColor: walmartPalette.primaryBlue, /* Walmart Blue */
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'Meals Donated',
+                            data: sponsorshipData.meals,
+                            backgroundColor: walmartPalette.accentGreen, /* Forest Green */
+                            yAxisID: 'y1',
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Sponsorship Investment vs. Social Impact',
+                            color: walmartPalette.darkGray /* Dark Gray */
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        if (context.dataset.yAxisID === 'y') {
+                                            label += new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' }).format(context.parsed.y);
+                                        } else {
+                                             label += context.parsed.y.toLocaleString() + ' meals';
+                                        }
+                                    }
+                                    return label;
+                                },
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Investment (ZAR)',
+                                color: walmartPalette.darkGray /* Dark Gray */
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return 'R' + value / 1000000 + 'M';
+                                },
+                                color: walmartPalette.mediumGray /* Medium Gray */
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Meals Donated',
+                                color: walmartPalette.darkGray /* Dark Gray */
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return value / 1000 + 'k';
+                                },
+                                color: walmartPalette.mediumGray /* Medium Gray */
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: walmartPalette.mediumGray /* Medium Gray */
+                            }
+                        }
+                    }
+                }
+            });
+        };
+        
+        let revenueProjectionChartInstance = null;
+        const createRevenueProjectionChart = () => {
+            const ctx = document.getElementById('revenueProjectionChart');
+            if (!ctx) return; // Exit if canvas not found
+
+            if (revenueProjectionChartInstance) {
+                revenueProjectionChartInstance.destroy(); // Destroy existing chart instance
+            }
+
+            revenueProjectionChartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'line',
+                data: revenueProjectionData,
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { 
+                                display: true, 
+                                text: 'Revenue in Millions (ZAR)',
+                                color: walmartPalette.darkGray /* Dark Gray */
+                            },
+                            ticks: {
+                                color: walmartPalette.mediumGray /* Medium Gray */
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: walmartPalette.mediumGray /* Medium Gray */
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
+        let revenueBreakdownChartInstance = null;
+        const createRevenueBreakdownChart = () => {
+            const ctx = document.getElementById('revenueBreakdownChart');
+            if (!ctx) return; // Exit if canvas not found
+
+            if (revenueBreakdownChartInstance) {
+                revenueBreakdownChartInstance.destroy(); // Destroy existing chart instance
+            }
+
+            revenueBreakdownChartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'doughnut',
+                data: revenueBreakdownData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: walmartPalette.darkGray /* Dark Gray */
+                            }
+                        },
+                        title: {
+                            display: false
+                        },
+                         tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+            });
+        };
+        
+        // --- Dashboard & Section Management ---
+        let activeSectionId = 'overview-king-price'; // Default visible section
+
+        function showSection(sectionId) {
+            // Hide all content sections
+            document.querySelectorAll('main .content-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show the selected section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+                activeSectionId = sectionId; // Update active section tracking
+            }
+
+            // Update navigation link active state
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(`'${sectionId}'`)) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Specific handling for maps section to load Leaflet
+            if (sectionId === 'maps') {
+                initLeafletMap();
+            }
+            // Re-render charts when their sections become visible
+            if (sectionId === 'value-giving-loop') {
+                createValueLoopChart();
+            } else if (sectionId === 'financial-projections') {
+                createRevenueProjectionChart();
+                createRevenueBreakdownChart();
+            }
+        }
+
+        // --- Maps Initialization Functions ---
+        let leafletMapInstance = null; // To store Leaflet map instance
+
+        function initLeafletMap() {
+            const mapContainer = document.getElementById("leaflet-map-container");
+            if (!mapContainer || leafletMapInstance) return; // Prevent re-initialization
+
+            // Set a fixed height for the map container if it's not already set by CSS
+            mapContainer.style.height = '400px'; 
+            mapContainer.style.width = '100%';
+
+            leafletMapInstance = L.map(mapContainer).setView([-25.7479, 28.2293], 13); // Centered on Pretoria, SA
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(leafletMapInstance);
+            L.marker([-25.7479, 28.2293]).addTo(leafletMapInstance)
+                .bindPopup("<b>King Price HQ</b><br>Pretoria, South Africa.").openPopup();
+        }
+
+        // --- Package Selection for Checkout ---
+        function selectPackage(packageName, price) {
+            // In a real application, this would trigger a modal, navigate to a checkout page,
+            // or update a global state/cart. For this static HTML, we'll simulate.
+            console.log(`Selected package: ${packageName} for R${price.toLocaleString()} for payment.`);
+            
+            // Example: Display a simple message to the user
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-walmart-blue-dark text-white p-6 rounded-lg shadow-lg z-50 text-center';
+            messageDiv.innerHTML = `
+                <p class="text-2xl font-bold mb-4">Package Selected!</p>
+                <p class="text-lg mb-4">You've selected the ${packageName} Package.</p>
+                <p class="text-xl font-bold text-walmart-yellow-spark">Proceeding to Payment for R${price.toLocaleString()}.</p>
+                <button class="mt-6 bg-walmart-yellow-spark text-walmart-blue-dark font-bold py-2 px-4 rounded-md" onclick="this.parentNode.remove()">OK</button>
+            `;
+            document.body.appendChild(messageDiv);
+
+            // In a real app, you'd navigate to a checkout form or trigger a payment gateway.
+            // showSection('vaultmesh-checkout'); // Could navigate to a checkout section if it were functional.
+        }
+
+
+        // --- On Load Initializations ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize chart data
+            sponsorshipData = {
+                labels: ['Bronze', 'Silver', 'Gold', 'National'],
+                investment: [500000, 1500000, 2500000, 5000000],
+                meals: [5000, 15000, 25000, 50000]
+            };
+
+            revenueProjectionData = {
+                labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Projected Revenue (in Millions ZAR)',
+                    data: [25, 60, 120, 250, 406],
+                    fill: true,
+                    backgroundColor: 'rgba(0, 113, 206, 0.2)', /* Walmart Blue with opacity */
+                    borderColor: 'rgba(0, 113, 206, 1)', /* Walmart Blue */
+                    tension: 0.4
+                }]
+            };
+            
+            revenueBreakdownData = {
+                labels: ['Sponsorships', 'Merchandise', 'Licensing', 'Ticket Sales', 'Other'],
+                datasets: [{
+                    label: 'Revenue Breakdown',
+                    data: [40, 30, 15, 10, 5],
+                    backgroundColor: [
+                        walmartPalette.primaryBlue,
+                        walmartPalette.darkBlue,
+                        walmartPalette.accentYellow,
+                        walmartPalette.accentGreen,
+                        walmartPalette.mediumGray
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+
+            // Set initial active section
+            showSection(activeSectionId);
+
+            // Initial rendering of charts (now called within showSection for relevant sections)
+            // createValueLoopChart();
+            // createRevenueProjectionChart();
+            // createRevenueBreakdownChart();
+        });
+    </script>
+</body>
+</html>
