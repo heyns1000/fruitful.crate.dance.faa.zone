@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦍Fruitful Innovations - Your Future, Today</title>
+<link rel="icon" href="/favicon.ico">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+/* Base Styles - Apple inspired cleanliness */
+:root {
+--text-color-light: #1d1d1f;
+--text-color-dark: #f5f5f7;
+--bg-color-light: #ffffff; /* Changed default light background to pure white */
+--bg-color-dark: #1a1a1c;
+--card-bg-light: #ffffff;
+--card-bg-dark: #2a2a2e;
+--border-color-light: #e8e8ed;
+--border-color-dark: #3a3a3e;
+--primary-color: #0071e3; /* Apple Blue */
+--secondary-color: #30d158; /* Apple Green */
+--tertiary-color: #ff3b30; /* Vibrant Red for specific accents */
+--muted-text-light: #6e6e73;
+--muted-text-dark: #a0a0a5;
+}
+
+body {
+font-family: 'Inter', sans-serif;
+background-color: var(--bg-color-light); /* Using the white variable */
+color: var(--text-color-light);
+line-height: 1.4;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+margin: 0;
+padding: 0;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark Mode styles */
+body.dark-mode {
+background-color: var(--bg-color-dark);
+color: var(--text-color-dark);
+}
+.dark-mode header {
+background-color: var(--card-bg-dark);
+border-bottom-color: var(--border-color-dark);
+box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+.dark-mode .logo-group {
+color: var(--text-color-dark);
+}
+.dark-mode .logo-separator {
+color: var(--muted-text-dark);
+}
+.dark-mode .logo-omnigrid {
+color: var(--text-color-dark);
+}
+.dark-mode .nav-list a {
+color: var(--muted-text-dark);
+}
+.dark-mode .nav-list a:hover {
+color: var(--primary-color);
+}
+.dark-mode .hamburger-menu {
+color: var(--text-color-dark);
+}
+/* Ensure specific sections also adapt to dark mode for backgrounds */
+.dark-mode #shareprice,
+.dark-mode #seedwave,
+.dark-mode section.bg-gray-700,
+.dark-mode #vault-access,
+.dark-mode #treaty,
+.dark-mode #vaultmesh,
+.dark-mode #about,
+.dark-mode #cta,
+.dark-mode footer {
+    background-color: var(--bg-color-dark); /* Use dark background for all sections */
+    color: var(--text-color-dark);
+}
+.dark-mode section h2, .dark-mode section h3 {
+    color: var(--text-color-dark);
+}
+.dark-mode section p {
+    color: var(--muted-text-dark);
+}
+.dark-mode #seedwave .w-full.max-w-4xl,
+.dark-mode #vault-access .w-full.h-\[800px\] {
+    background-color: var(--card-bg-dark); /* Darker card/iframe background */
+    border-color: var(--border-color-dark);
+}
+.dark-mode .terminal-btn {
+    background-color: var(--card-bg-dark);
+    color: var(--text-color-dark);
+    border-color: var(--border-color-dark);
+}
+.dark-mode .terminal-btn:hover {
+    background-color: #3a3a3e;
+    color: var(--text-color-dark);
+}
+.dark-mode .glyph {
+    background-color: var(--card-bg-dark);
+    color: var(--text-color-dark);
+    border-color: var(--border-color-dark);
+}
+.dark-mode .glyph:hover {
+    background-color: #3a3a3e;
+    color: var(--text-color-dark);
+}
+.dark-mode footer a {
+    color: var(--muted-text-dark);
+}
+.dark-mode footer a:hover {
+    color: var(--text-color-dark);
+}
+
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 20px;
+}
+
+/* Header - Minimalist and clean */
+header {
+background-color: #ffffff;
+border-bottom: 1px solid #e8e8ed;
+padding-top: 1rem;
+padding-bottom: 1rem;
+box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+position: sticky;
+top: 0;
+z-index: 50;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 0;
+/* Added transition for smoother day/night toggle */
+transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.header-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+}
+
+.logo-group {
+display: flex;
+align-items: center;
+gap: 10px;
+color: var(--text-color-light);
+transition: color 0.3s ease;
+}
+
+.logo-group .logo-link {
+text-decoration: none;
+color: inherit;
+display: flex;
+align-items: center;
+gap: 5px;
+}
+.logo-fruitful {
+color: var(--primary-color);
+font-size: 1.6rem;
+font-weight: 800;
+}
+.logo-separator {
+color: var(--muted-text-light);
+font-size: 1.4rem;
+font-weight: 600;
+}
+.logo-omnigrid {
+color: var(--text-color-light);
+font-size: 1.4rem;
+font-weight: 600;
+}
+
+.main-nav {
+display: flex;
+align-items: center;
+gap: 20px;
+}
+
+.nav-list {
+display: flex;
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+.nav-list a {
+text-decoration: none;
+color: var(--muted-text-light);
+font-weight: 500;
+font-size: 0.95rem;
+transition: color 0.3s ease;
+}
+.nav-list a:hover {
+color: var(--primary-color);
+}
+
+.nav-actions {
+display: flex;
+align-items: center;
+gap: 15px;
+}
+
+/* Styling for header CTA buttons */
+.header-cta-button {
+display: inline-block;
+padding: 8px 16px;
+background-color: var(--primary-color);
+color: white;
+text-decoration: none;
+border-radius: 20px;
+font-weight: 600;
+font-size: 0.85rem;
+transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, color 0.3s ease; /* Added color transition */
+box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+line-height: 1.2;
+}
+.header-cta-button:hover {
+background-color: #0066cc;
+transform: translateY(-1px);
+box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+.header-cta-button.secondary {
+background-color: #e8e8ed;
+color: #424245;
+box-shadow: none;
+border: 1px solid #dcdcdc;
+}
+.header-cta-button.secondary:hover {
+background-color: #dcdcdc;
+color: #1d1d1f;
+box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Enhanced Day/Night Toggle Button in Dark Mode */
+body.dark-mode .header-cta-button.secondary {
+    background-color: var(--primary-color); /* Primary blue in dark mode */
+    color: white; /* White text */
+    border-color: var(--primary-color); /* Blue border */
+    box-shadow: 0 1px 5px rgba(0, 113, 227, 0.4); /* Subtle blue glow */
+}
+body.dark-mode .header-cta-button.secondary:hover {
+    background-color: #0066cc; /* Darker blue on hover */
+    border-color: #0066cc;
+    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.6);
+}
+
+
+.hamburger-menu {
+display: none;
+background: none;
+border: none;
+font-size: 1.5rem;
+cursor: pointer;
+color: var(--text-color-light);
+transition: color 0.3s ease;
+}
+
+/* Moved Hero Content Section */
+.innovate-connect-thrive-section {
+padding: 4rem 1.5rem;
+text-align: center;
+color: var(--text-color-light);
+background-color: var(--bg-color-light);
+border-bottom: 1px solid var(--border-color-light);
+/* Added transition for smoother day/night toggle */
+transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+body.dark-mode .innovate-connect-thrive-section {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+    border-bottom-color: var(--border-color-dark);
+}
+body.dark-mode .innovate-connect-thrive-section h2 {
+    color: var(--text-color-dark);
+}
+body.dark-mode .innovate-connect-thrive-section h2 span {
+    color: var(--primary-color); /* Keep primary color for accent */
+}
+
+
+/* Hero Section (now just canvas background) */
+.hero-canvas-section {
+position: relative;
+min-height: 100vh; /* Increased height to ensure full vertical space */
+background-color: var(--bg-color-light); /* Explicitly use variable */
+overflow: hidden;
+display: flex;
+justify-content: center;
+align-items: center;
+/* Added transition for smoother day/night toggle */
+transition: background-color 0.3s ease;
+}
+body.dark-mode .hero-canvas-section {
+    background-color: var(--bg-color-dark);
+}
+
+.hero-canvas-section #rhythmicCanvas {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+display: block;
+z-index: 0;
+background-color: transparent;
+}
+.hero-canvas-overlay {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: radial-gradient(circle at center, rgba(0, 113, 227, 0.05) 0%, transparent 70%);
+pointer-events: none;
+z-index: 1;
+animation: subtlePulse 5s infinite ease-in-out alternate;
+}
+
+@keyframes subtlePulse {
+0% { opacity: 0.5; transform: scale(1); }
+100% { opacity: 0.7; transform: scale(1.03); }
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+header {
+flex-direction: column;
+padding-bottom: 10px;
+align-items: flex-start;
+background-color: #ffffff;
+}
+.header-content {
+flex-direction: column;
+align-items: flex-start;
+}
+.logo-group {
+margin-bottom: 15px;
+}
+.logo-group .logo-link {
+gap: 5px;
+}
+.logo-fruitful {
+font-size: 1.4rem;
+}
+
+.main-nav {
+display: none;
+flex-direction: column;
+position: static;
+width: 100%;
+background-color: var(--card-bg-light);
+border-top: 1px solid var(--border-color-light);
+padding: 10px 0;
+box-shadow: none;
+}
+.dark-mode .main-nav {
+background-color: var(--card-bg-dark);
+border-top-color: var(--border-color-dark);
+}
+.main-nav.active {
+display: flex;
+background-color: #ffffff;
+}
+.nav-list {
+flex-direction: column;
+text-align: center;
+width: 100%;
+gap: 10px;
+}
+.nav-list li {
+width: 100%;
+}
+.nav-list a {
+display: block;
+padding: 8px 0;
+}
+.nav-actions {
+flex-direction: column;
+gap: 10px;
+width: 100%;
+padding-top: 10px;
+border-top: 1px solid var(--border-color-light);
+margin-top: 10px;
+}
+.dark-mode .nav-actions {
+border-top-color: var(--border-color-dark);
+}
+.nav-actions .cta-button {
+width: calc(100% - 40px);
+margin: 0 20px;
+text-align: center;
+}
+
+.hamburger-menu {
+display: block;
+position: absolute;
+top: 15px;
+right: 20px;
+z-index: 1001;
+color: var(--text-color-light);
+}
+
+.hero-section h1 {
+font-size: 2.8rem;
+}
+.hero-section p {
+font-size: 1rem;
+}
+.hero-cta-button {
+padding: 0.7rem 1.5rem;
+font-size: 0.9rem;
+}
+section {
+padding: 4rem 1.5rem;
+background-color: #ffffff;
+}
+section h2, section h3 {
+font-size: 1.8rem;
+margin-bottom: 1.5rem;
+}
+section p {
+font-size: 1rem;
+}
+.feature-grid {
+grid-template-columns: 1fr;
+}
+#shareprice h2 {
+font-size: 1.5rem;
+}
+#price {
+font-size: 2.5rem;
+}
+#vault-access .w-full.h-\[800px\] {
+height: 500px;
+}
+.terminal-btn {
+padding: 0.8rem 1rem;
+font-size: 0.9rem;
+}
+#treaty blockquote {
+font-size: 1.2rem;
+}
+#vaultmesh h2, #vaultmesh h3 {
+font-size: 1.8rem;
+}
+#vaultmesh p, #vaultmesh ul li {
+font-size: 0.95rem;
+}
+#cta h3 {
+font-size: 2rem;
+}
+#cta p {
+font-size: 1rem;
+}
+}
+</style>
+</head>
+<body class="light-mode">
+
+<header class="main-header">
+<div class="container header-content">
+<div class="logo-group">
+<a href="index.html" class="logo-link">
+<span class="logo-fruitful">Fruitful™</span>
+</a>
+<button class="hamburger-menu" aria-label="Toggle navigation">
+<i class="fas fa-bars"></i>
+</button>
+</div>
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="https://faa.zone/contact-us.html">✉️ Contact Us</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button id="dayNightToggle" class="header-cta-button secondary">
+                        <i class="fas fa-moon"></i> Day/Night
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="innovate-connect-thrive" class="innovate-connect-thrive-section">
+            <h2 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+                Innovate. Connect. <span class="text-blue-600">Thrive.</span>
+            </h2>
+            <div class="cta-group">
+                <a href="https://fruitful.faa.zone/omnigrid.html" class="hero-cta-button">
+                    🕸️ Explore Omnigrid
+                        </a> 
+                        <a href="https://vaultmesh.faa.zone/index.html" class="hero-cta-button cta-button-secondary">
+                            🌐 VaultMesh™
+                </a> 
+            </div>
+        </section>
+
+        <section class="hero-canvas-section">
+            <canvas id="rhythmicCanvas"></canvas>
+            <div class="hero-canvas-overlay"></div>
+        </section>
+    </main>
+
+    <footer class="py-8 px-6 md:px-12 text-center">
+        © 2025 FAA.zone™ Treaty System™. All Rights Reserved. Powered by 🦍 glyphs + Vault API. Synced with Seedwave™.
+        <div class="mt-4 flex justify-center space-x-4">
+            <a href="/terms-of-service.html" class="text-muted-text-light hover:text-text-color-light">Terms of Service</a>
+            <span class="text-muted-text-light">|</span>
+            <a href="/privacy-policy.html" class="text-muted-text-light hover:text-text-color-light">Privacy Policy</a>
+            <span class="text-muted-text-light">|</span>
+            <a href="/cookies.html" class="text-muted-text-light hover:text-text-color-light">Cookies</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- API Keys (kept for completeness, but not used in this simplified version) ---
+        const PAYPAL_SDK_KEY = "BAAGdPecRsf6dw_nIrWqUen0GdW0UsBZapp1Gn62xkPdD-Vqc-4lqWAidKK8LOObXux8pHJGjXknZoar6Q";
+        const PAYPAL_HOSTED_BUTTON_STARTER = "EMWGPGHNN8Y8E";
+        const PAYPAL_HOSTED_BUTTON_PRO = "QGU3ZUQCMD49Q";
+        const PAYPAL_HOSTED_BUTTON_ENTERPRISE = "9C88S44F93M5J";
+        const PAYPAL_HOSTED_BUTTON_BANIMAL = "YOUR_BANIMAL_PAYPAL_BUTTON_ID_HERE";
+        const GOOGLE_MAPS_API_KEY = "AIzaSyBPG8dG29cl0TvYRGyLozejGed5Wj5Ab80";
+        const SPOTIFY_ACCESS_0TOKEN = "BQBDSZ232IQmSLVbROkxqdwNMoGhtitKOJBjDzE-Lu9YKsSK1RKVwXNfYfncP2wf6Fj6xcYlnGD75baEqOmd3XtxhU...";
+        const GEMINI_AI_API_KEY = "AIzaSyBGSDZATtITv5iIoB3rgKHBpWx9MrufxXE";
+        const XERO_CLIENT_ID = "81B3573D453040508996432C5DAD565B";
+        const XERO_CLIENT_SECRET = "FIaJGmsaCcKR3Z3k_WdXPnQd04EhYy2_bImPmoitQDP1U6Smaq"; 
+        const XERO_REDIRECT_URI = "https://seedwave.faa.zone/admin_panel_xero.html";
+        const XERO_WEBHOOK_KEY = "2fd5LQV0TQDI3572Er/sg66zqEbl8mFWRyfX3XkoKFZGRLK2cZPGpWV/j4yMTU7aUpbgBCfeZkuHnQIwD/0igw==";
+
+
+        // --- Rhythmic Canvas Glyph Drawing Logic ---
+        const canvas = document.getElementById('rhythmicCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+
+        // Default canvas parameters - Adjusted for a strong, clear, Apple-like pulse
+        let defaultNumLines = 120; // Increased lines for a very dense, more impactful visual
+        let defaultLineFrequency = 0.006; // Wider, more prominent waves, slightly less than before to prevent overlap
+        let defaultLineSpeed = 0.002; // Slower movement for a calmer, more deliberate flow
+        let defaultLineAmplitudeFactor = 0.4; // Reduced amplitude to ensure waves fit vertically
+
+        let currentNumLines = defaultNumLines;
+        let currentLineFrequency = defaultLineFrequency;
+        let currentLineSpeed = defaultLineSpeed;
+        let currentLineAmplitudeFactor = defaultLineAmplitudeFactor;
+
+
+        // Set canvas size for responsiveness
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            if (canvas.width < 300) canvas.width = 300;
+            if (canvas.height < 150) canvas.height = 150;
+            // Recalculate lineAmplitude based on new height
+            // The max wave height will be 2 * lineAmplitude. We want this to fit within canvas.height
+            // So, 2 * (canvas.height * currentLineAmplitudeFactor) <= canvas.height
+            // This means currentLineAmplitudeFactor should be <= 0.5.
+            // Setting it to 0.4 gives some padding at top/bottom.
+            lineAmplitude = canvas.height * currentLineAmplitudeFactor;
+        }
+
+        // Initial resize and add listener for window resize
+        window.addEventListener('load', resizeCanvas);
+        window.addEventListener('resize', resizeCanvas);
+
+        let time = 0;
+        let lineAmplitude; // This will be set by resizeCanvas initially
+
+        function drawGlyph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Apply a subtle transparent overlay on each frame to create a trailing effect
+            const overlayAlpha = 0; // Completely remove fade for maximum crispness and "clear" movement
+            ctx.fillStyle = `rgba(255, 255, 255, ${overlayAlpha})`; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            time += currentLineSpeed;
+
+            // Define centerX and maxHorizontalDistance outside the inner loop
+            const centerX = canvas.width / 2;
+            // Define the target width for the "noodle" relative to the canvas width
+            const noodleTargetWidthRatio = 0.6; // Noodle will occupy 60% of the canvas width
+            const noodleWidth = canvas.width * noodleTargetWidthRatio;
+            const noodleStartX = centerX - (noodleWidth / 2);
+            const noodleEndX = centerX + (noodleWidth / 2);
+
+            for (let i = 0; i < currentNumLines; i++) {
+                ctx.beginPath();
+                // Offset calculation for staggered waves
+                const offset = i * (Math.PI * 2 / currentNumLines) * 2; 
+                
+                // Dynamic, colorful hue based on time and line index - Enhanced, calm, vibrant palette
+                const baseHue = (time * 50 + i * 2.5) % 360; // Faster hue shift for more visible color change
+                let colorHue = baseHue; // Use direct baseHue for full spectrum vibrant colors
+
+                // Maximize saturation and opacity for strong visual impact
+                const saturation = 100; // Full saturation
+                const lightness = 50 + Math.cos(time * 0.1 + i * 0.01) * 10; // Mid-range lightness (40-60) for richer, deeper colors
+                const opacity = 1.0; // Fully opaque
+                ctx.strokeStyle = `hsla(${colorHue}, ${saturation}%, ${lightness}%, ${opacity})`;
+
+                ctx.lineWidth = 2.0; // Max line thickness for a very strong, clear presence
+
+                for (let x = 0; x < canvas.width; x += 5) {
+                    let effectiveAmplitudeScale = 0; // Default to 0 outside the noodle's horizontal bounds
+
+                    // Only apply amplitude if x is within the noodle's horizontal bounds
+                    if (x >= noodleStartX && x <= noodleEndX) {
+                        // Normalize x within the noodle's width
+                        const normalizedNoodleX = (x - noodleStartX) / noodleWidth;
+                        // Use a cosine wave to create a smooth fall-off from the center of the noodle
+                        // This creates the "narrowed to the center" effect
+                        effectiveAmplitudeScale = Math.pow(Math.cos((normalizedNoodleX - 0.5) * Math.PI), 2.0); // Centered cosine, power for sharper falloff
+                    }
+
+                    // More complex sine wave combination for "VaultMesh pulsing" and "noodle juice" flow
+                    // Centering the wave around the middle of the canvas height
+                    const y = Math.sin(x * currentLineFrequency + time + offset) * (lineAmplitude * (0.9 + Math.sin(time * 0.03 + i * 0.015) * 0.1) * effectiveAmplitudeScale) // Main wave with amplitude pulse, scaled horizontally
+                              + Math.sin(x * (currentLineFrequency * 2.5) + time * 0.8 + offset * 0.7) * (lineAmplitude * 0.15 * effectiveAmplitudeScale) // Second wave, scaled horizontally
+                              + Math.cos(x * (currentLineFrequency * 1.2) + time * 0.6 + offset * 1.3) * (lineAmplitude * 0.1 * effectiveAmplitudeScale) // Third wave, scaled horizontally
+                              + Math.sin(x * (currentLineFrequency * 3.0) + time * 1.0 + offset * 0.4) * (lineAmplitude * 0.08 * effectiveAmplitudeScale) // Fourth wave, scaled horizontally
+                              + canvas.height / 2; // Center of the canvas
+                    if (x === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.stroke();
+            }
+
+            animationFrameId = requestAnimationFrame(drawGlyph);
+        }
+
+        window.onload = function () {
+            resizeCanvas();
+            drawGlyph();
+            loadDayNightPreference(); // Load day/night preference on load
+        };
+
+
+        // --- Day/Night Toggle Logic ---
+        const dayNightToggle = document.getElementById('dayNightToggle');
+        if (dayNightToggle) {
+            dayNightToggle.addEventListener('click', () => {
+                const isDarkMode = !document.body.classList.contains('dark-mode'); // Determine target mode first
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                dayNightToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Day/Night' : '<i class="fas fa-moon"></i> Day/Night';
+            });
+        }
+
+        function loadDayNightPreference() {
+            const savedTheme = localStorage.getItem('theme');
+            const dayNightToggle = document.getElementById('dayNightToggle');
+            const isDarkMode = savedTheme === 'dark'; // Determine initial dark mode state
+
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                if (dayNightToggle) dayNightToggle.innerHTML = '<i class="fas fa-sun"></i> Day/Night';
+            } else {
+                document.body.classList.remove('dark-mode');
+                if (dayNightToggle) dayNightToggle.innerHTML = '<i class="fas fa-moon"></i> Day/Night';
+            }
+        }
+
+        // Hamburger menu toggle for mobile
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainNav = document.querySelector('.main-nav');
+            const hamburgerMenu = document.querySelector('.hamburger-menu');
+
+            if (hamburgerMenu && mainNav) {
+                hamburgerMenu.addEventListener('click', () => {
+                    mainNav.classList.toggle('active');
+                });
+            }
+
+            // Close mobile nav on link click
+            document.querySelectorAll('.main-nav .nav-list a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                    }
+                });
+            });
+
+            // Smooth scrolling for internal links (kept for any potential future internal links)
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.length > 1) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(href);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
