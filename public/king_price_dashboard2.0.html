@@ -18,6 +18,7 @@
         /* King Price Brand Styling */
         :root {
             --kp-red-royal: #B10F1F; /* PANTONE 7621 C (R177 G15 B31) */
+            --kp-red-royal-rgb: 177, 15, 31; /* Added for rgba usage */
             --kp-red-highlight: #D6001C; /* PANTONE 2035 C (R214 G0 B28) */
             --kp-red-shadow: #522B39; /* PANTONE 7645 C (R82 G43 B57) */
             --kp-gold-accent: #FFD700; /* A complementary gold/yellow for accents */
@@ -31,11 +32,11 @@
             --text-color-light: var(--kp-dark-gray);
             --text-color-dark: var(--kp-white);
             --bg-color-light: var(--kp-white);
-            --bg-color-dark: var(--kp-red-shadow); /* Darker red for dark mode background */
+            --bg-color-dark: #4A0010; /* A deep, rich red for the main background in dark mode */
             --card-bg-light: var(--kp-white);
-            --card-bg-dark: #3a1c24; /* A slightly lighter shade of shadow red for cards in dark mode */
+            --card-bg-dark: #5A1020; /* A slightly lighter, but still deep red for cards in dark mode */
             --border-color-light: var(--kp-border-light);
-            --border-color-dark: var(--kp-red-royal); /* Royal red for dark mode borders */
+            --border-color-dark: var(--kp-gold-accent); /* Royal gold for dark mode borders */
             --primary-color: var(--kp-red-royal); /* King Price Royal Red */
             --secondary-color: var(--kp-red-highlight); /* King Price Highlight Red */
             --tertiary-color: var(--kp-gold-accent); /* King Price Gold Accent */
@@ -65,9 +66,9 @@
             color: var(--text-color-dark);
         }
         .dark-mode header {
-            background-color: var(--card-bg-dark);
-            border-bottom-color: var(--border-color-dark);
-            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+            background-color: var(--card-bg-dark); /* Header also gets a dark card background */
+            border-bottom-color: var(--border-color-dark); /* Gold border for header in dark mode */
+            box-shadow: 0 1px 0 rgba(0,0,0,0.4); /* Stronger shadow */
         }
         .dark-mode .logo-group {
             color: var(--text-color-dark);
@@ -96,14 +97,17 @@
         .dark-mode #vaultmesh,
         .dark-mode #about,
         .dark-mode #cta,
-        .dark-mode footer {
+        .dark-mode footer,
+        .dark-mode .sidebar-bg,
+        .dark-mode .main-content-bg,
+        .dark-mode .dashboard-card-bg {
             background-color: var(--bg-color-dark); /* Use dark background for all sections */
             color: var(--text-color-dark);
         }
-        .dark-mode section h2, .dark-mode section h3 {
+        .dark-mode section h2, .dark-mode section h3, .dark-mode .dashboard-primary-text {
             color: var(--text-color-dark);
         }
-        .dark-mode section p {
+        .dark-mode section p, .dark-mode .text-muted, .dark-mode .dashboard-secondary-text {
             color: var(--muted-text-dark);
         }
         .dark-mode #seedwave .w-full.max-w-4xl,
@@ -135,6 +139,55 @@
         .dark-mode footer a:hover {
             color: var(--text-color-dark);
         }
+        .dark-mode .card {
+            background-color: var(--card-bg-dark);
+            border-color: var(--border-color-dark);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+        }
+        .dark-mode .tier-card.highlight {
+            border-color: var(--kp-gold-accent);
+        }
+        .dark-mode .sidebar-nav-item {
+            color: var(--muted-text-dark);
+        }
+        .dark-mode .sidebar-nav-item:hover {
+            background-color: rgba(var(--kp-red-royal-rgb), 0.2);
+            color: var(--primary-color);
+        }
+        .dark-mode .sidebar-nav-item.active {
+            background-color: var(--primary-color);
+            color: var(--text-color-dark);
+        }
+        .dark-mode .sidebar-nav-item.active i {
+            color: var(--text-color-dark);
+        }
+        .dark-mode .faa-intro-card, .dark-mode .bbbee-section-card {
+            background: linear-gradient(135deg, var(--kp-red-royal), var(--kp-red-shadow));
+            border-color: var(--kp-gold-accent);
+            box-shadow: 0 10px 20px rgba(var(--kp-red-royal-rgb), 0.3);
+        }
+        .dark-mode .faa-point-icon, .dark-mode .bbbee-point-icon {
+            background-color: var(--kp-gold-accent);
+            color: var(--kp-red-royal);
+        }
+        .dark-mode .pitch-icon {
+            color: var(--kp-gold-accent);
+        }
+        .dark-mode .smart-grid-module-card {
+            background-color: var(--card-bg-dark);
+            border: 1px solid var(--border-color-dark);
+        }
+        .dark-mode .module-icon {
+            color: var(--kp-gold-accent);
+        }
+        .dark-mode .value-loop-card {
+            background-color: var(--card-bg-dark);
+            border: 1px solid var(--border-color-dark);
+        }
+        .dark-mode .list-item-icon {
+            color: var(--kp-gold-accent);
+        }
+
 
         .container {
             max-width: 1200px;
@@ -227,6 +280,36 @@
             gap: 15px;
         }
 
+        /* Styling for header CTA buttons */
+        .hero-cta-button {
+            display: inline-block;
+            padding: 10px 20px; /* Increased padding */
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.95rem; /* Slightly larger font */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, color 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            line-height: 1.2;
+        }
+        .hero-cta-button:hover {
+            background-color: var(--kp-red-highlight); /* Use highlight red on hover */
+            transform: translateY(-2px); /* More pronounced lift */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Stronger shadow */
+        }
+        .hero-cta-button.secondary {
+            background-color: var(--kp-light-gray); /* King Price light gray */
+            color: var(--kp-dark-gray); /* King Price dark gray */
+            box-shadow: none;
+            border: 1px solid var(--kp-border-light);
+        }
+        .hero-cta-button.secondary:hover {
+            background-color: var(--kp-border-light); /* Slightly darker light gray */
+            color: var(--kp-dark-gray);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
         /* Styling for header CTA buttons */
         .header-cta-button {
             display: inline-block;
@@ -346,536 +429,320 @@
             100% { opacity: 0.7; transform: scale(1.03); }
         }
 
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                padding-bottom: 10px;
-                align-items: flex-start;
-                background-color: var(--bg-color-light);
-            }
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .logo-group {
-                margin-bottom: 15px;
-            }
-            .logo-group .logo-link {
-                gap: 5px;
-            }
-            .logo-fruitful {
-                font-size: 1.4rem;
-            }
-
-            .main-nav {
-                display: none;
-                flex-direction: column;
-                position: static;
-                width: 100%;
-                background-color: var(--card-bg-light);
-                border-top: 1px solid var(--border-color-light);
-                padding: 10px 0;
-                box-shadow: none;
-            }
-            .dark-mode .main-nav {
-                background-color: var(--card-bg-dark);
-                border-top-color: var(--border-color-dark);
-            }
-            .main-nav.active {
-                display: flex;
-                background-color: var(--bg-color-light);
-            }
-            .nav-list {
-                flex-direction: column;
-                text-align: center;
-                width: 100%;
-                gap: 10px;
-            }
-            .nav-list li {
-                width: 100%;
-            }
-            .nav-list a {
-                display: block;
-                padding: 8px 0;
-            }
-            .nav-actions {
-                flex-direction: column;
-                gap: 10px;
-                width: 100%;
-                padding-top: 10px;
-                border-top: 1px solid var(--border-color-light);
-                margin-top: 10px;
-            }
-            .dark-mode .nav-actions {
-                border-top-color: var(--border-color-dark);
-            }
-            .nav-actions .cta-button {
-                width: calc(100% - 40px);
-                margin: 0 20px;
-                text-align: center;
-            }
-
-            .hamburger-menu {
-                display: block;
-                position: absolute;
-                top: 15px;
-                right: 20px;
-                z-index: 1001;
-                color: var(--text-color-light);
-            }
-
-            .hero-section h1 {
-                font-size: 2.8rem;
-            }
-            .hero-section p {
-                font-size: 1rem;
-            }
-            .hero-cta-button {
-                padding: 0.7rem 1.5rem;
-                font-size: 0.9rem;
-            }
-            section {
-                padding: 4rem 1.5rem;
-                background-color: var(--bg-color-light);
-            }
-            section h2, section h3 {
-                font-size: 1.8rem;
-                margin-bottom: 1.5rem;
-            }
-            section p {
-                font-size: 1rem;
-            }
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-            #shareprice h2 {
-                font-size: 1.5rem;
-            }
-            #price {
-                font-size: 2.5rem;
-            }
-            #vault-access .w-full.h-\[800px\] {
-                height: 500px;
-            }
-            .terminal-btn {
-                padding: 0.8rem 1rem;
-                font-size: 0.9rem;
-            }
-            #treaty blockquote {
-                font-size: 1.2rem;
-            }
-            #vaultmesh h2, #vaultmesh h3 {
-                font-size: 1.8rem;
-            }
-            #vaultmesh p, #vaultmesh ul li {
-                font-size: 0.95rem;
-            }
-            #cta h3 {
-                font-size: 2rem;
-            }
-            #cta p {
-                font-size: 1rem;
-            }
+        /* Dashboard specific styles */
+        .dashboard-container {
+            display: flex;
+            flex-grow: 1;
+            width: 100%;
+            max-width: 100%; /* Ensure it takes full width */
         }
 
-        /* Existing Dashboard Specific Styles (adapted for new header structure) */
-        .dashboard-header-bg { /* This class is no longer directly used for the header background */
-            background-color: var(--kp-red-royal);
-            color: var(--kp-white);
-        }
         .sidebar-bg {
-            background-color: var(--kp-white);
-            color: var(--kp-dark-gray);
-            border-right: 1px solid var(--kp-border-light);
+            background-color: var(--bg-color-light);
+            transition: background-color 0.3s ease;
+            border-right: 1px solid var(--border-color-light);
         }
-        /* Dark mode for sidebar */
-        body.dark-mode .sidebar-bg {
-            background-color: var(--card-bg-dark); /* Use card-bg-dark for sidebar in dark mode */
-            color: var(--text-color-dark);
-            border-right-color: var(--border-color-dark);
-        }
-
         .main-content-bg {
-            background-color: var(--kp-light-gray);
+            background-color: var(--kp-light-gray); /* Slightly different bg for main content in light mode */
+            transition: background-color 0.3s ease;
         }
-        /* Dark mode for main content background */
-        body.dark-mode .main-content-bg {
-            background-color: var(--bg-color-dark); /* Use bg-color-dark for main content in dark mode */
-        }
-
-        .dashboard-primary-text {
-            color: var(--kp-red-royal);
-        }
-        /* Dark mode for dashboard primary text */
-        body.dark-mode .dashboard-primary-text {
-            color: var(--kp-gold-accent); /* Gold accent for primary text in dark mode for contrast */
-        }
-
-        .dashboard-secondary-text {
-            color: var(--kp-red-royal);
-        }
-        /* Dark mode for dashboard secondary text */
-        body.dark-mode .dashboard-secondary-text {
-            color: var(--kp-red-highlight); /* Highlight red for secondary text in dark mode */
-        }
-
-        .text-accent-yellow { /* This class is now superseded by --kp-gold-accent */
-            color: var(--kp-gold-accent);
-        }
-        .text-accent-green { /* This class is now superseded by --kp-red-highlight */
-            color: var(--kp-red-highlight);
-        }
-        .text-muted {
-            color: var(--kp-medium-gray);
-        }
-        /* Dark mode for muted text */
-        body.dark-mode .text-muted {
-            color: var(--muted-text-dark);
+        .dark-mode .main-content-bg {
+            background-color: var(--bg-color-dark);
         }
 
         .dashboard-card-bg {
-            background-color: var(--kp-white);
-            border: 1px solid var(--kp-border-light);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            background-color: var(--card-bg-light);
+            transition: background-color 0.3s ease;
+            border: 1px solid var(--border-color-light);
         }
-        /* Dark mode for dashboard cards */
-        body.dark-mode .dashboard-card-bg {
-            background-color: var(--card-bg-dark); /* Use card-bg-dark for cards in dark mode */
-            border-color: var(--border-color-dark);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .hover-bg-light:hover {
-            background-color: rgba(177, 15, 31, 0.1);
-        }
-        /* Dark mode hover for sidebar items */
-        body.dark-mode .hover-bg-light:hover {
-            background-color: rgba(255, 255, 255, 0.1); /* Lighter hover for dark mode */
-        }
-
-        .sidebar-nav-item.active {
-            background-color: var(--kp-red-royal);
-            color: var(--kp-white);
-        }
-        .sidebar-nav-item.active:hover {
-            background-color: var(--kp-red-shadow);
-        }
-        /* Dark mode active for sidebar items */
-        body.dark-mode .sidebar-nav-item.active {
-            background-color: var(--kp-red-royal); /* Keep royal red for active in dark mode */
-            color: var(--kp-white);
-        }
-        body.dark-mode .sidebar-nav-item.active:hover {
-            background-color: var(--kp-red-shadow);
-        }
-        /* Default sidebar item text color in dark mode */
-        body.dark-mode .sidebar-nav-item {
-            color: var(--text-color-dark); /* White text for non-active sidebar items in dark mode */
-        }
-
-
-        .card {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid var(--kp-border-light);
-        }
-        /* Dark mode for generic cards */
-        body.dark-mode .card {
+        .dark-mode .dashboard-card-bg {
             background-color: var(--card-bg-dark);
             border-color: var(--border-color-dark);
-            color: var(--text-color-dark); /* Ensure text in cards is white in dark mode */
-        }
-        body.dark-mode .card h3, body.dark-mode .card h4 {
-            color: var(--text-color-dark); /* Ensure headings in cards are white in dark mode */
-        }
-        body.dark-mode .card ul li {
-            color: var(--muted-text-dark); /* Ensure list items in cards are muted white in dark mode */
         }
 
+        .dashboard-primary-text {
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+        .dark-mode .dashboard-primary-text {
+            color: var(--text-color-dark); /* Primary text becomes white in dark mode */
+        }
+
+        .dashboard-secondary-text {
+            color: var(--kp-dark-gray);
+            transition: color 0.3s ease;
+        }
+        .dark-mode .dashboard-secondary-text {
+            color: var(--kp-gold-accent); /* Secondary text becomes gold in dark mode */
+        }
+
+        .text-muted {
+            color: var(--muted-text-light);
+            transition: color 0.3s ease;
+        }
+        .dark-mode .text-muted {
+            color: var(--muted-text-dark);
+        }
+
+        .card {
+            background-color: var(--card-bg-light);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
 
         .kpi-value {
-            font-weight: 900;
-            color: var(--kp-red-royal);
+            color: var(--primary-color);
+            font-weight: 700;
+            line-height: 1.1;
         }
-        /* Dark mode for KPI values */
-        body.dark-mode .kpi-value {
-            color: var(--kp-gold-accent); /* Gold accent for KPI values in dark mode */
+        .dark-mode .kpi-value {
+            color: var(--kp-gold-accent);
         }
 
         .kpi-label {
-            font-weight: 700;
-            color: var(--kp-dark-gray);
+            color: var(--muted-text-light);
+            font-weight: 500;
         }
-        /* Dark mode for KPI labels */
-        body.dark-mode .kpi-label {
-            color: var(--text-color-dark); /* White for KPI labels in dark mode */
+        .dark-mode .kpi-label {
+            color: var(--muted-text-dark);
         }
 
         .list-item-icon {
-            color: var(--kp-red-highlight);
-            margin-right: 0.75rem;
+            color: var(--primary-color);
             font-weight: bold;
+            margin-right: 0.5rem;
+            flex-shrink: 0; /* Prevent icon from shrinking */
         }
-        /* Dark mode for list item icons */
-        body.dark-mode .list-item-icon {
-            color: var(--kp-gold-accent); /* Gold accent for list item icons in dark mode */
+        .dark-mode .list-item-icon {
+            color: var(--kp-gold-accent);
+        }
+
+        /* FAA Partnership Section Specific Styles */
+        .faa-intro-card, .bbbee-section-card {
+            background: linear-gradient(135deg, var(--kp-red-royal), var(--kp-red-shadow)); /* Changed to shadow red for a deeper gradient */
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            border: 1px solid var(--kp-red-shadow);
+            transition: all 0.3s ease;
+        }
+        .faa-title, .bbbee-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: var(--kp-white);
+        }
+        .faa-subtitle, .bbbee-subtitle {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+        }
+        .faa-point, .bbbee-point {
+            display: flex;
+            align-items: flex-start; /* Ensure vertical alignment to top */
+            gap: 1rem;
+            background-color: rgba(255,255,255,0.1);
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .faa-point-icon, .bbbee-point-icon {
+            font-size: 2rem;
+            color: var(--kp-gold-accent);
+            flex-shrink: 0;
+            background-color: rgba(var(--kp-red-royal-rgb), 0.4);
+            padding: 0.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .faa-point-text, .bbbee-point-text {
+            flex-grow: 1; /* Allow text to take available space */
+            word-wrap: break-word; /* Ensure long words break */
+            overflow-wrap: break-word; /* Modern equivalent */
+        }
+        .faa-point-text p, .bbbee-point-text p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
         }
 
         .pitch-point {
             display: flex;
             align-items: flex-start;
-            margin-bottom: 1rem;
+            gap: 1rem;
         }
         .pitch-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+        .dark-mode .pitch-icon {
             color: var(--kp-gold-accent);
-            margin-right: 1rem;
-            font-size: 1.5rem;
-            line-height: 1.5rem;
-            font-weight: 900;
         }
-        .fruitful-section-title {
-            font-size: 2.25rem;
-            font-weight: 800;
-            color: var(--kp-red-royal);
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        .fruitful-section-subtitle {
-            font-size: 1.125rem;
-            color: var(--kp-medium-gray);
-            text-align: center;
-            max-width: 48rem;
-            margin: 0 auto 3rem auto;
-        }
-        .tier-card {
-            background-color: var(--kp-white);
+
+        /* Smart Grid Module Cards */
+        .smart-grid-module-card {
+            background-color: var(--card-bg-light);
+            border: 1px solid var(--border-color-light);
             border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            border: 1px solid var(--kp-border-light);
+            transition: all 0.3s ease;
         }
-        .tier-card:hover {
+        .smart-grid-module-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .smart-grid-module-card h4 {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        .dark-mode .smart-grid-module-card h4 {
+            color: var(--kp-gold-accent);
+        }
+        .module-icon {
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        .dark-mode .module-icon {
+            color: var(--kp-gold-accent);
+        }
+        .smart-grid-module-card ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+            flex-grow: 1;
+        }
+        .smart-grid-module-card ul li {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--muted-text-light);
+        }
+        .dark-mode .smart-grid-module-card ul li {
+            color: var(--muted-text-dark);
+        }
+
+        /* Sponsorship Packages Tier Cards */
+        .tier-card {
+            background-color: var(--card-bg-light);
+            border: 1px solid var(--border-color-light);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
         }
         .tier-card.highlight {
-            border-color: var(--kp-red-royal);
-            transform: scale(1.02);
+            border: 3px solid var(--primary-color); /* Thicker border for highlight */
+            box-shadow: 0 8px 16px rgba(var(--kp-red-royal-rgb), 0.4); /* Stronger shadow */
+            transform: translateY(-5px);
         }
-        /* Dark mode for tier cards */
-        body.dark-mode .tier-card {
-            background-color: var(--card-bg-dark);
-            border-color: var(--border-color-dark);
+        .dark-mode .tier-card.highlight {
+            border: 3px solid var(--kp-gold-accent); /* Thicker gold border in dark mode */
+            box-shadow: 0 8px 16px rgba(255, 215, 0, 0.4); /* Gold shadow */
         }
-        body.dark-mode .tier-card.highlight {
-            border-color: var(--kp-gold-accent); /* Highlight with gold in dark mode */
+        .tier-card h3 {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
         }
-
+        .dark-mode .tier-card h3 {
+            color: var(--kp-gold-accent);
+        }
+        .tier-card p {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--kp-dark-gray);
+        }
+        .dark-mode .tier-card p {
+            color: var(--text-color-dark);
+        }
+        .benefit-list {
+            text-align: left;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
         .benefit-list li {
             display: flex;
-            align-items: flex-start;
+            align-items: flex-start; /* Changed to flex-start for multi-line text alignment */
             margin-bottom: 0.75rem;
+            color: var(--muted-text-light);
         }
-        .benefit-list i {
-            color: var(--kp-red-highlight);
+        .dark-mode .benefit-list li {
+            color: var(--muted-text-dark);
+        }
+        .benefit-list li i {
+            color: var(--primary-color);
             margin-right: 0.75rem;
-            margin-top: 0.25rem;
+            font-size: 1.1rem;
+            flex-shrink: 0; /* Prevent icon from shrinking */
         }
-        /* Dark mode for benefit list icons */
-        body.dark-mode .benefit-list i {
-            color: var(--kp-gold-accent);
-        }
-
-        .value-loop-card {
-            background: linear-gradient(135deg, #FFEDED, #F8DCDC);
-            border-left: 4px solid var(--kp-red-royal);
-        }
-        /* Dark mode for value loop card */
-        body.dark-mode .value-loop-card {
-            background: linear-gradient(135deg, #42212b, #3a1c24); /* Darker gradient */
-            border-left-color: var(--kp-gold-accent); /* Gold accent border in dark mode */
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-        .banimal-footer-feature { /* This class is no longer used for the footer */
-            background-color: var(--kp-red-royal);
-        }
-        .bbbee-section-card {
-            background: linear-gradient(135deg, var(--kp-red-royal), var(--kp-red-shadow));
-            color: white;
-            padding: 2.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        .bbbee-section-card .bbbee-title {
-            font-size: 2.75rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            color: white;
-        }
-        .bbbee-section-card .bbbee-subtitle {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--kp-gold-accent);
-        }
-        .bbbee-section-card .bbbee-point {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-        .bbbee-section-card .bbbee-point-icon {
-            font-size: 2.5rem;
-            color: var(--kp-gold-accent);
-            margin-right: 1.5rem;
-            min-width: 2.5rem;
-        }
-        .bbbee-section-card .bbbee-point-text {
-            font-size: 1.125rem;
-            line-height: 1.6;
-            color: white;
-        }
-        .bbbee-section-card .bbbee-point-text strong {
-            color: var(--kp-gold-accent);
-        }
-
-        .smart-grid-module-card {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--kp-red-royal);
-        }
-        /* Dark mode for smart grid module cards */
-        body.dark-mode .smart-grid-module-card {
-            background-color: var(--card-bg-dark);
-            border-color: var(--border-color-dark);
-            color: var(--text-color-dark);
-        }
-        body.dark-mode .smart-grid-module-card h4 {
-            color: var(--kp-gold-accent); /* Gold accent for module card titles in dark mode */
-        }
-        body.dark-mode .smart-grid-module-card .module-icon {
-            color: var(--kp-gold-accent); /* Gold accent for module icons in dark mode */
-        }
-        body.dark-mode .smart-grid-module-card ul li {
-            color: var(--muted-text-dark);
-        }
-
-        .crate-dance-feature-card {
-            background-color: var(--kp-light-gray);
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-left: 4px solid var(--kp-red-royal);
-        }
-        /* Dark mode for crate dance feature cards */
-        body.dark-mode .crate-dance-feature-card {
-            background-color: var(--card-bg-dark);
-            border-color: var(--border-color-dark);
-            color: var(--text-color-dark);
-        }
-        body.dark-mode .crate-dance-feature-card h4 {
-            color: var(--kp-gold-accent);
-        }
-        body.dark-mode .crate-dance-feature-card .feature-icon {
-            color: var(--kp-gold-accent);
-        }
-        body.dark-mode .crate-dance-feature-card p {
-            color: var(--muted-text-dark);
-        }
-
-        .faa-intro-card {
-            background: linear-gradient(135deg, var(--kp-red-royal), var(--kp-red-shadow));
-            color: white;
-            padding: 2.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-        .faa-intro-card .faa-title {
-            font-size: 2.75rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            color: white;
-        }
-        .faa-intro-card .faa-subtitle {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--kp-gold-accent);
-        }
-        .faa-intro-card .faa-point {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-        .faa-intro-card .faa-point-icon {
-            font-size: 2.5rem;
-            color: var(--kp-gold-accent);
-            margin-right: 1.5rem;
-            min-width: 2.5rem;
-        }
-        .faa-intro-card .faa-point-text {
-            font-size: 1.125rem;
-            line-height: 1.6;
-            color: white;
-        }
-        .faa-intro-card .faa-point-text strong {
+        .dark-mode .benefit-list li i {
             color: var(--kp-gold-accent);
         }
         .cta-button {
-            background-color: var(--kp-gold-accent);
-            color: var(--kp-red-royal);
-            font-weight: 900;
-            padding: 1rem 2rem;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.85rem 1.75rem; /* Increased padding for larger buttons */
             border-radius: 0.5rem;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: none;
         }
         .cta-button:hover {
-            background-color: #E0A800;
+            background-color: var(--kp-red-highlight);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .footer-links a {
-            color: var(--kp-white);
+        .dark-mode .cta-button {
+            background-color: var(--kp-gold-accent);
+            color: var(--kp-red-royal);
         }
-        .footer-links a:hover {
-            color: var(--kp-gold-accent);
-        }
-        .copyright-text {
-            color: rgba(255, 255, 255, 0.7);
+        .dark-mode .cta-button:hover {
+            background-color: #e6c200; /* Slightly darker gold */
+            color: var(--kp-red-shadow);
         }
 
-        /* Responsive Adjustments (from original dashboard CSS, adapted) */
-        @media (max-width: 1024px) {
+        /* Value Giving Loop Card */
+        .value-loop-card {
+            background-color: var(--card-bg-light);
+            border: 1px solid var(--border-color-light);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            height: 400px; /* Fixed height for charts */
+            padding: 1rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) { /* Adjusting breakpoint for tablet/smaller desktop */
             .dashboard-sidebar {
                 width: 100%;
                 height: auto;
@@ -887,7 +754,7 @@
                 justify-content: center;
                 gap: 0.5rem;
             }
-            .dashboard-sidebar-nav-item {
+            .dashboard-sidebar-nav-item { /* This class is not used, use sidebar-nav-item instead */
                 flex-grow: 1;
                 justify-content: center;
                 font-size: 0.9rem;
@@ -896,16 +763,16 @@
             .dashboard-container {
                 flex-direction: column;
             }
-            .dashboard-main-content {
+            .dashboard-main-content { /* This class is not used in the current HTML, can be removed if not needed */
                 width: 100%;
             }
-            .grid-cols-2-md {
-                grid-template-columns: 1fr;
+            .grid-cols-2-md { /* This class seems custom, ensure it works as intended */
+                grid-template-columns: 1fr; /* Default to single column on smaller screens */
             }
-            .main-content-wrapper {
+            .main-content-wrapper { /* This class is not used in the current HTML, can be removed if not needed */
                 flex-direction: column;
             }
-            .music-sub-sidebar {
+            .music-sub-sidebar { /* This class is not used in the current HTML, can be removed if not needed */
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid var(--kp-border-light);
@@ -918,7 +785,7 @@
             }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 768px) { /* Mobile specific adjustments */
             header {
                 padding: 0.5rem 1rem;
                 flex-direction: column;
@@ -926,7 +793,11 @@
                 text-align: center;
                 gap: 0.5rem;
             }
-            header .flex.items-center.space-x-4 {
+            .header-content { /* Ensure header content stacks on mobile */
+                flex-direction: column;
+                align-items: center;
+            }
+            header .flex.items-center.space-x-4 { /* This class is not used directly, but keep for context */
                 width: 100%;
                 justify-content: center;
                 margin-top: 0.5rem;
@@ -937,15 +808,42 @@
                 justify-content: center;
                 margin-bottom: 0.5rem;
             }
-            header nav {
+            .main-nav {
+                flex-direction: column;
                 width: 100%;
-                justify-content: center;
-                margin-bottom: 0.5rem;
-                flex-wrap: wrap;
+                display: none; /* Hidden by default on mobile */
             }
-            header nav a {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.9rem;
+            .main-nav.active {
+                display: flex; /* Shown when active */
+            }
+            .nav-list {
+                flex-direction: column;
+                width: 100%;
+                align-items: center;
+            }
+            .nav-list li {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            .nav-list a {
+                padding: 0.5rem 0;
+                display: block;
+            }
+            .nav-actions {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.5rem;
+            }
+            .header-cta-button {
+                width: 100%;
+                text-align: center;
+            }
+            .hamburger-menu {
+                display: block; /* Show hamburger on mobile */
+                position: absolute;
+                right: 1rem;
+                top: 1.5rem;
             }
             .logo-group {
                 gap: 0.5rem;
@@ -966,7 +864,7 @@
                 grid-template-columns: 1fr;
             }
             .metric-card-icon { font-size: 3rem; } /* This class is not used, can be removed if not needed */
-            .metric-card h3 { font-size: 1.5rem; } /* This class is not used, can be removed if not needed */
+            .metric-card h3 { font-size: 1.5rem; } /* This class is not used, can: be removed if not needed */
             .metric-value { font-size: 2.2rem; } /* This class is not used, can be removed if not needed */
             .whimsical-icon { font-size: 3.5rem; } /* This class is not used, can be removed if not needed */
             .whimsical-card h3 { font-size: 1.8rem; } /* This class is not used, can be removed if not needed */
@@ -1342,7 +1240,6 @@
                                     <li>Regional Auditions: Host across urban centers, townships, and underserved communities.</li>
                                     <li>Regional Showcases: Top performers compete in live regional events with brand activations and local vendor support.</li>
                                     <li>National Competition & Grand Finale: Rewards include cash prizes, performance opportunities, career-building exposure, and mentorship programs.</li>
-                                    <li>Live and Digital Streaming: Performances broadcast through partnerships with Netflix, Showmax, and Red Bull for national and global exposure.</li>
                                 </ul>
                                 <li class="flex items-start mt-4"><span class="list-item-icon"></span>**PARTNERSHIPS AND SPONSORSHIPS:** Forge strategic partnerships with brands, cultural organizations, and sponsors (e.g., Coca-Cola, MTN, Red Bull) for funding, resources, and promotional support.</li>
                                 <li class="flex items-start mt-4"><span class="list-item-icon"></span>**ECONOMIC EMPOWERMENT:** Enable participants to earn income through sponsored performances, merchandise sales, and digital content monetization. Introduce platforms like Fruitful Sekelbos Tank™ to support local artists by facilitating bulk purchases, providing branding/packaging/production support, and connecting artists to corporate markets (Mr Price Home, Makro, Builders Warehouse, Woolworths).</li>
@@ -1862,6 +1759,7 @@
         <script>
             const kingPricePalette = {
                 primaryRed: '#B10F1F',    // Royal Red
+                primaryRedRgb: '177, 15, 31', // Added for rgba usage
                 highlightRed: '#D6001C',  // Highlight Red
                 shadowRed: '#522B39',     // Shadow Red
                 goldAccent: '#FFD700',    // Gold Accent
@@ -1944,10 +1842,10 @@
                         }
 
                         const y = Math.sin(x * currentLineFrequency + time + offset) * (lineAmplitude * (0.9 + Math.sin(time * 0.03 + i * 0.015) * 0.1) * effectiveAmplitudeScale)
-                                 + Math.sin(x * (currentLineFrequency * 2.5) + time * 0.8 + offset * 0.7) * (lineAmplitude * 0.15 * effectiveAmplitudeScale)
-                                 + Math.cos(x * (currentLineFrequency * 1.2) + time * 0.6 + offset * 1.3) * (lineAmplitude * 0.1 * effectiveAmplitudeScale)
-                                 + Math.sin(x * (currentLineFrequency * 3.0) + time * 1.0 + offset * 0.4) * (lineAmplitude * 0.08 * effectiveAmplitudeScale)
-                                 + canvas.height / 2;
+                                    + Math.sin(x * (currentLineFrequency * 2.5) + time * 0.8 + offset * 0.7) * (lineAmplitude * 0.15 * effectiveAmplitudeScale)
+                                    + Math.cos(x * (currentLineFrequency * 1.2) + time * 0.6 + offset * 1.3) * (lineAmplitude * 0.1 * effectiveAmplitudeScale)
+                                    + Math.sin(x * (currentLineFrequency * 3.0) + time * 1.0 + offset * 0.4) * (lineAmplitude * 0.08 * effectiveAmplitudeScale)
+                                    + canvas.height / 2;
                         if (x === 0) {
                             ctx.moveTo(x, y);
                         } else {
@@ -1976,6 +1874,13 @@
                     document.body.classList.toggle('dark-mode');
                     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
                     dayNightToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Day/Night' : '<i class="fas fa-moon"></i> Day/Night';
+                    // Re-render charts to apply new theme colors
+                    if (activeSectionId === 'value-giving-loop') {
+                        createValueLoopChart();
+                    } else if (activeSectionId === 'financial-projections') {
+                        createRevenueProjectionChart();
+                        createRevenueBreakdownChart();
+                    }
                 });
             }
 
@@ -2279,7 +2184,7 @@
                 });
 
                 // Specific handling for maps section to load Leaflet
-                if (sectionId === 'maps') {
+                if (sectionId === 'maps') { // This section is not in the provided HTML, but keeping the logic in case it's added later
                     initLeafletMap();
                 }
                 // Re-render charts when their sections become visible
