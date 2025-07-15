@@ -32,9 +32,9 @@
             --text-color-light: var(--kp-dark-gray);
             --text-color-dark: var(--kp-white);
             --bg-color-light: var(--kp-white);
-            --bg-color-dark: #4A0010; /* A deep, rich red for the main background in dark mode */
+            --bg-color-dark: #2A0008; /* Deep, rich red for main background in dark mode, matching screenshot */
             --card-bg-light: var(--kp-white);
-            --card-bg-dark: #5A1020; /* A slightly lighter, but still deep red for cards in dark mode */
+            --card-bg-dark: #3A0010; /* Slightly lighter, but still deep red for cards in dark mode, matching screenshot */
             --border-color-light: var(--kp-border-light);
             --border-color-dark: var(--kp-gold-accent); /* Royal gold for dark mode borders */
             --primary-color: var(--kp-red-royal); /* King Price Royal Red */
@@ -68,7 +68,7 @@
         .dark-mode header {
             background-color: var(--card-bg-dark); /* Header also gets a dark card background */
             border-bottom-color: var(--border-color-dark); /* Gold border for header in dark mode */
-            box-shadow: 0 1px 0 rgba(0,0,0,0.4); /* Stronger shadow */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6); /* Stronger shadow, matching screenshot */
         }
         .dark-mode .logo-group {
             color: var(--text-color-dark);
@@ -89,6 +89,8 @@
             color: var(--text-color-dark);
         }
         /* Ensure specific sections also adapt to dark mode for backgrounds */
+        .dark-mode #innovate-connect-thrive, /* Added for hero section */
+        .dark-mode .hero-canvas-section, /* Added for canvas section */
         .dark-mode #shareprice,
         .dark-mode #seedwave,
         .dark-mode section.bg-gray-700,
@@ -142,7 +144,7 @@
         .dark-mode .card {
             background-color: var(--card-bg-dark);
             border-color: var(--border-color-dark);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.12); /* Matching screenshot shadow intensity */
         }
         .dark-mode .tier-card.highlight {
             border-color: var(--kp-gold-accent);
@@ -151,7 +153,7 @@
             color: var(--muted-text-dark);
         }
         .dark-mode .sidebar-nav-item:hover {
-            background-color: rgba(var(--kp-red-royal-rgb), 0.2);
+            background-color: rgba(var(--kp-red-royal-rgb), 0.3); /* Stronger hover effect for sidebar items */
             color: var(--primary-color);
         }
         .dark-mode .sidebar-nav-item.active {
@@ -489,7 +491,7 @@
             border-radius: 0.5rem;
             padding: 1.5rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .kpi-value {
@@ -864,7 +866,7 @@
                 grid-template-columns: 1fr;
             }
             .metric-card-icon { font-size: 3rem; } /* This class is not used, can be removed if not needed */
-            .metric-card h3 { font-size: 1.5rem; } /* This class is not used, can: be removed if not needed */
+            .metric-card h3 { font-size: 1.5rem; } /* This class is not used, can be removed if not needed */
             .metric-value { font-size: 2.2rem; } /* This class is not used, can be removed if not needed */
             .whimsical-icon { font-size: 3.5rem; } /* This class is not used, can be removed if not needed */
             .whimsical-card h3 { font-size: 1.8rem; } /* This class is not used, can be removed if not needed */
@@ -997,6 +999,7 @@
                 </a>
                 <div class="mt-8 pt-4 border-t border-kp-border-light w-full">
                     <h3 class="text-xl font-semibold dashboard-primary-text mb-4">FAA.Zone™ Portal</h3>
+                    <!-- These links are external and should not use data-section-id or preventDefault -->
                     <a href="https://fruitfulcratedance.com" target="_blank" class="sidebar-nav-item flex items-center gap-3 w-full p-3 rounded-lg text-lg font-medium transition duration-200 text-kp-dark-gray hover:bg-hover-bg-light">
                         <i class="fas fa-globe"></i> Public Portal
                     </a>
@@ -1240,6 +1243,7 @@
                                     <li>Regional Auditions: Host across urban centers, townships, and underserved communities.</li>
                                     <li>Regional Showcases: Top performers compete in live regional events with brand activations and local vendor support.</li>
                                     <li>National Competition & Grand Finale: Rewards include cash prizes, performance opportunities, career-building exposure, and mentorship programs.</li>
+                                    <li>Live and Digital Streaming: Performances broadcast through partnerships with Netflix, Showmax, and Red Bull for national and global exposure.</li>
                                 </ul>
                                 <li class="flex items-start mt-4"><span class="list-item-icon"></span>**PARTNERSHIPS AND SPONSORSHIPS:** Forge strategic partnerships with brands, cultural organizations, and sponsors (e.g., Coca-Cola, MTN, Red Bull) for funding, resources, and promotional support.</li>
                                 <li class="flex items-start mt-4"><span class="list-item-icon"></span>**ECONOMIC EMPOWERMENT:** Enable participants to earn income through sponsored performances, merchandise sales, and digital content monetization. Introduce platforms like Fruitful Sekelbos Tank™ to support local artists by facilitating bulk purchases, providing branding/packaging/production support, and connecting artists to corporate markets (Mr Price Home, Makro, Builders Warehouse, Woolworths).</li>
@@ -1842,10 +1846,10 @@
                         }
 
                         const y = Math.sin(x * currentLineFrequency + time + offset) * (lineAmplitude * (0.9 + Math.sin(time * 0.03 + i * 0.015) * 0.1) * effectiveAmplitudeScale)
-                                    + Math.sin(x * (currentLineFrequency * 2.5) + time * 0.8 + offset * 0.7) * (lineAmplitude * 0.15 * effectiveAmplitudeScale)
-                                    + Math.cos(x * (currentLineFrequency * 1.2) + time * 0.6 + offset * 1.3) * (lineAmplitude * 0.1 * effectiveAmplitudeScale)
-                                    + Math.sin(x * (currentLineFrequency * 3.0) + time * 1.0 + offset * 0.4) * (lineAmplitude * 0.08 * effectiveAmplitudeScale)
-                                    + canvas.height / 2;
+                                 + Math.sin(x * (currentLineFrequency * 2.5) + time * 0.8 + offset * 0.7) * (lineAmplitude * 0.15 * effectiveAmplitudeScale)
+                                 + Math.cos(x * (currentLineFrequency * 1.2) + time * 0.6 + offset * 1.3) * (lineAmplitude * 0.1 * effectiveAmplitudeScale)
+                                 + Math.sin(x * (currentLineFrequency * 3.0) + time * 1.0 + offset * 0.4) * (lineAmplitude * 0.08 * effectiveAmplitudeScale)
+                                 + canvas.height / 2;
                         if (x === 0) {
                             ctx.moveTo(x, y);
                         } else {
@@ -1937,11 +1941,15 @@
                 // Attach event listeners to sidebar navigation items
                 document.querySelectorAll('.sidebar-nav-item').forEach(item => {
                     item.addEventListener('click', function(e) {
-                        e.preventDefault(); // Prevent default anchor behavior
-                        const sectionId = this.getAttribute('data-section-id');
-                        if (sectionId) {
-                            showSection(sectionId);
+                        // Check if the link is an internal section link (has data-section-id)
+                        if (this.hasAttribute('data-section-id')) {
+                            e.preventDefault(); // Prevent default anchor behavior only for internal links
+                            const sectionId = this.getAttribute('data-section-id');
+                            if (sectionId) {
+                                showSection(sectionId);
+                            }
                         }
+                        // For external links (without data-section-id), allow default behavior
                     });
                 });
             });
